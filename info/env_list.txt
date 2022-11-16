@@ -1,0 +1,27 @@
+My virtual environments:
+
+To create a new environment: conda create --name myenv
+
+1) embed (for bio_embeddings)
+
+2) esm (for the esm1-b model) 
+source ~/miniforge3/bin/activate
+conda activate esm
+
+3) miniforge (where tensorflow/keras are installed)
+
+for miniforge, run the following command:
+source ~/miniforge3/bin/activate
+
+-------------------------------------------------------------------------------------------
+**** Note: you need to first activate miniforge3 before you activate esm. ****
+-------------------------------------------------------------------------------------------
+4) blast_env 
+
+BLAST:
+
+blastp -db {input.verified_component} -query {input.input_seqs} -outfmt 6 -out {output} -evalue 0.001 -max_target_seqs 1 -num_threads {threads}
+
+blastp -db ./ORF_files/ORFs_ecoli_nissle/protein_ORFs_nissle_mine_filtered.fasta -query ./microcin_files/Microcins_Known.fasta -outfmt 6 -out ./BLAST_results/ -evalue 0.001 
+
+blastp -subject ./ORF_files/ORFs_ecoli_nissle/protein_ORFs_nissle_mine_filtered.fasta -query ./microcin_files/Microcins_Known.fasta -out ./BLAST_results/blast_nissle.txt -evalue 1 -outfmt 7 -num_descriptions 50
