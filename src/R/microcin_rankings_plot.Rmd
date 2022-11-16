@@ -1,0 +1,100 @@
+
+
+```{r}
+library(tidyverse)
+library(cowplot)
+options(scipen = 999)
+library(colorspace)
+library(ggridges)
+library(stringr)
+library(ggrepel)
+library(ggpmisc)
+library(gridExtra)
+library(grid)
+```
+
+
+
+```{r}
+rankings <- read.csv(file = "../../analysis/rankings/10_known_microcin_rankings/10_known_microcin_rankings.csv", header=TRUE, sep=",")
+rankings
+
+```
+
+
+
+```{r}
+rankings_clean <- rankings %>%
+  filter(!grepl("-",orf_number)) %>%
+  filter(query != 'average') %>%
+  mutate(found_self = ifelse(query == found_microcin, "self", "non-self_find")) %>%
+  filter(found_microcin != "V_sp") %>%
+  mutate(found_microcin = ifelse(found_microcin == "L_tr", "L", found_microcin),
+         found_microcin = ifelse(found_microcin == "N_tr", "N", found_microcin))
+  
+#rankings_clean$rank = as.factor(rankings_clean$rank)
+
+tile_plot <- rankings_clean %>%
+  ggplot(aes(x = query, y = found_microcin, fill = factor(rank))) +
+  geom_tile() +
+  geom_text(aes(
+    label = rank),
+    color = "grey40", 
+    size = 6) +
+  scale_x_discrete(
+    name = "query embedding",
+    expand = c(0,0)
+  ) +
+  scale_y_discrete(
+    name = "found microcin",
+    expand = c(0,0)
+  ) +                               #1        2          3        4           6         8           50       118
+  scale_fill_manual(values = c("#c2d9ff", "#a1bff0","#81a4de", "#638ccf", "#5c8ad6", "#4b7ed1", "#0d3b85", "#032254")) +     #old oclor: c2d9ff
+  theme_cowplot(12) +
+  theme(
+    panel.background = element_blank(),
+    axis.text = element_text(color = "black", size = 12),
+    legend.position = "none")
+  
+tile_plot
+
+ggsave(filename = "../../analysis/figures/microcin_rankings_plot.png", plot = tile_plot, width = 7, height = 6)
+```
+ 
+```{r}
+
+rankings_clean2 <- rankings_clean %>%
+  mutate(found = ifelse(rank > 5, "microcin not in top 5 hits", "finds non-self microcin in top 5 hits")) %>%
+  mutate(found = ifelse(found_microcin == query, "finds self in top 5 hits", found)) %>%
+  mutate(found_microcin = fct_relevel(found_microcin, "V", "N", "L", "E492", "G492", "I47", "H47", "M")) %>%
+  mutate(query = fct_relevel(query, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI"))
+rankings_clean2
+ 
+```
+
+
+```{r}
+tile_plot2 <- rankings_clean2 %>%
+  ggplot(aes(x = query, y = fct_rev(found_microcin), fill = found)) +
+  geom_tile(colour = "#9e7b78",
+            size = 0.5) +
+  scale_x_discrete(
+    name = "query embedding",
+    expand = c(0,0)
+  ) +
+  scale_y_discrete(
+    name = "found microcin",
+    expand = c(0,0)
+  ) +                                   
+  scale_fill_manual(values = c("#c2d9ff", "#81a4de", "#942e23")) +     #old color: c2d9ff
+  theme_cowplot(12) +
+  labs(fill = "") +
+  theme(
+    axis.text = element_text(color = "black", size = 12),
+    legend.position = "top")
+  
+tile_plot2
+
+ggsave(filename = "../../analysis/figures/microcin_rankings_groups.png", plot = tile_plot2, width = 7, height = 6)
+ 
+```

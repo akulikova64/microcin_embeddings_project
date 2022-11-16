@@ -1,0 +1,4 @@
+python3 extract.py esm1b_t33_650M_UR50S Microcins_Known.fasta Microcins_Known_emb_esm1b/ \
+    --repr_layers 33 --include mean per_tok
+
+python3 extract.py esm1b_t33_650M_UR50S ./ORFs_kpneimoniae/protein_k_pneumoniae_orfs.fasta genome_embeddings_kpneumoniae/ --include mean per_tok

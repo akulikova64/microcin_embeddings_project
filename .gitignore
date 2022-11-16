@@ -1,0 +1,16 @@
+**/.DS_Store
+.Rproj.user
+.RData
+.Rhistory
+BLAST_results
+distance_csvs
+embeddings
+for_PCA
+genome_annotation_csvs
+genome_files
+microcin_files
+ORF_files
+Touchon_datasets
+alignments
+analysis
+info

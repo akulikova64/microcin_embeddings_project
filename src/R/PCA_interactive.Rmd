@@ -1,0 +1,380 @@
+---
+title: "PCA Analysis: Microcins vs Klebsiella cluster"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(cowplot)
+options(scipen = 999)
+library(colorspace)
+library(broom)  # for augment(), tidy()
+library(ggiraph)
+```
+
+### PCA between 10 microcins and 372 ORFs
+```{r}
+
+# loading data:
+embeddings <- read.csv(file = "../../for_PCA/kpneumoniae_PCA_data.csv", header=TRUE, sep=",")
+
+embeddings_filtered <- embeddings %>%
+  filter(name != 378,
+         name != 354,
+         name != 176)
+
+pca_fit <- embeddings_filtered %>% 
+  select(where(is.numeric)) %>% # retain only numeric columns
+  scale() %>%                   # scale to zero mean and unit variance
+  prcomp()  
+```
+
+### PC1 vs PC2
+```{r}
+library(ggiraph)
+
+
+point_plot1 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(embeddings_filtered) %>%
+  ggplot(aes(.fittedPC1, .fittedPC2)) +
+  #geom_point(aes(color = group),
+   #          size = 1) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+    size = 1
+    ) 
+  labs(x = "PC1", y = "PC2") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot1,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot1
+
+ggsave(filename = "../../analysis/figures/k_pneumoniae/PCA_1_2.png", plot = point_plot1, width = 5, height = 4)
+```
+### PC2 vs PC3
+```{r}
+point_plot2 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(embeddings_filtered) %>%
+  ggplot(aes(.fittedPC2, .fittedPC3)) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+             size = 1) +
+  labs(x = "PC2", y = "PC3") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot2,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot2
+```
+### PC3 vs PC4
+```{r}
+point_plot2 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(embeddings_filtered) %>%
+  ggplot(aes(.fittedPC3, .fittedPC4)) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+             size = 1) +
+  labs(x = "PC3", y = "PC4") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot2,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot2
+```
+### PC4 vs PC5
+```{r}
+point_plot2 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(embeddings_filtered) %>%
+  ggplot(aes(.fittedPC4, .fittedPC5)) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+             size = 1) +
+  labs(x = "PC4", y = "PC5") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot2,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot2
+```
+
+
+### Variance explained bar plot
+```{r, warning=FALSE}
+variance <- pca_fit %>%
+  # extract eigenvalues
+  tidy(matrix = "eigenvalues") %>%
+  ggplot(aes(PC, percent)) + 
+  geom_col(fill = "darkslategrey", alpha = 0.8) + 
+  scale_x_continuous(
+    # create one axis tick per PC
+    limits = c(0, 21),
+    breaks = 1:20,
+    expand = expansion(add = c(0, 0))
+  ) +
+  scale_y_continuous(
+    name = "variance explained",
+    # format y axis ticks as percent values
+    label = scales::label_percent(accuracy = 1),
+    expand = expansion(add = c(0, 0.005))
+  ) +
+  theme_classic()
+variance
+
+ggsave(filename = "../../analysis/figures/k_pneumoniae/variance.png", plot = variance, width = 8, height = 6)
+```
+
+### Rotation Matrix
+```{r}
+arrow_style <- arrow(
+  angle = 20, length = grid::unit(8, "pt"),
+  ends = "first", type = "closed"
+)
+
+rotation_matrix <- pca_fit %>%
+  # extract rotation matrix
+  tidy(matrix = "rotation") %>%
+  pivot_wider(
+    names_from = "PC", values_from = "value",
+    names_prefix = "PC"
+  ) %>%
+  ggplot(aes(PC1, PC2)) +
+  geom_segment(
+    xend = 0, yend = 0,
+    arrow = arrow_style
+  ) +
+  geom_text(aes(label = column), hjust = 1) +
+  coord_fixed()
+
+rotation_matrix
+```
+# K pneumoniae cluster with 45 microcins (known + novel)
+```{r}
+# loading data:
+embeddings <- read.csv(file = "../../for_PCA/kpneumoniae_PCA_data_45_microcins.csv", header=TRUE, sep=",")
+
+embeddings_filtered <- embeddings %>%
+  filter(name != 378,
+         name != 354,
+         name != 176)
+
+pca_fit <- embeddings_filtered %>% 
+  select(where(is.numeric)) %>% # retain only numeric columns
+  scale() %>%                   # scale to zero mean and unit variance
+  prcomp()  
+
+```
+
+### PC1 vs PC2
+```{r}
+library(ggiraph)
+
+augmented <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(embeddings_filtered)
+
+point_plot1 <- augmented %>%
+  ggplot(aes(.fittedPC1, .fittedPC2)) +
+  geom_point(aes(color = group),
+           size = 0.7) +
+  # geom_text_repel(
+  #   data = subset(augmented, group == "microcin"),
+  #   aes(
+  #     label = name),
+  #   max.overlaps = Inf,
+  #   box.padding = 0.7) +
+  # geom_point_interactive(
+  #   aes(tooltip = name,
+  #       color = group),
+  #   size = 1
+  #   ) +
+  labs(x = "PC1", y = "PC2") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot1,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot1
+
+ggsave(filename = "../../analysis/figures/k_pneumoniae/PCA_45_microcins.png", plot = point_plot1, width = 5, height = 4)
+```
+
+# Ecoli Nissle PCA
+
+```{r}
+# loading data:
+embeddings <- read.csv(file = "../../for_PCA/ecoli_nissle_PCA_data.csv", header=TRUE, sep=",")
+
+embeddings_filtered <- embeddings %>%
+  filter(name != 50922,
+         name != 50922-1,
+         name != 50942)
+```
+
+```{r}
+microcins <- embeddings_filtered %>%
+  filter(group == "microcin")
+
+orfs <- embeddings_filtered %>%
+  filter(group == "orf")
+
+orf_sample = sample_n(orfs, 300)
+
+pca_data = rbind(microcins, orf_sample)
+```
+
+```{r}
+pca_fit <- pca_data %>% 
+  select(where(is.numeric)) %>% # retain only numeric columns
+  scale() %>%                   # scale to zero mean and unit variance
+  prcomp()  
+```
+
+```{r}
+library(ggiraph)
+
+
+point_plot1 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(pca_data) %>%
+  ggplot(aes(.fittedPC1, .fittedPC2)) +
+  #geom_point(aes(color = group),
+   #          size = 1) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+    size = 1
+    ) +
+  labs(x = "PC1", y = "PC2") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot1,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot1
+#ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2.png", plot = point_plot1, width = 8, height = 6)
+```
+
+```{r}
+library(ggiraph)
+
+
+point_plot1 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(pca_data) %>%
+  ggplot(aes(.fittedPC2, .fittedPC3)) +
+  #geom_point(aes(color = group),
+   #          size = 1) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+    size = 1
+    ) +
+  labs(x = "PC2", y = "PC3") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot1,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot1
+```
+
+## adding 35 more microcins. (keeping orfs at 300 random sampled)
+```{r}
+embeddings1 <- read.csv(file = "../../for_PCA/kpneumoniae_PCA_data_45_microcins.csv", header=TRUE, sep=",")
+microcins <- embeddings1 %>%
+  filter(group == "microcin")
+
+embeddings2 <- read.csv(file = "../../for_PCA/ecoli_nissle_PCA_data.csv", header=TRUE, sep=",")
+orfs <- embeddings2 %>%
+  filter(group == "orf")
+
+orf_sample = sample_n(orfs, 300)
+
+pca_data = rbind(microcins, orf_sample)
+```
+
+```{r}
+pca_fit <- pca_data %>% 
+  select(where(is.numeric)) %>% # retain only numeric columns
+  scale() %>%                   # scale to zero mean and unit variance
+  prcomp()  
+```
+
+```{r}
+library(ggiraph)
+
+
+point_plot1 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(pca_data) %>%
+  ggplot(aes(.fittedPC1, .fittedPC2)) +
+  #geom_point(aes(color = group),
+   #          size = 1) +
+  geom_point_interactive(
+    aes(tooltip = name,
+        color = group),
+    size = 1
+    ) +
+  labs(x = "PC1", y = "PC2") +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1")
+
+girafe(
+  ggobj = point_plot1,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+
+point_plot1
+ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2_45_microcins.png", plot = point_plot1, width = 8, height = 6)
+```
+
+
+
+
+
+
+
+

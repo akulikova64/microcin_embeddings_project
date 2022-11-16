@@ -1,0 +1,303 @@
+---
+title: "Touchon_datasets"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# K pneumoniae data:
+
+library(tidyverse)
+library(cowplot)
+library(colorspace)
+options(scipen = 999)
+
+```
+
+Loading data:
+```{r}
+# loading data:
+accenssion_phylo_water <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Touchon_accenssions_phylogroups/Cinful_Water_Phylo.csv", header=TRUE, sep=",")
+accenssion_phylo_extraintestinal <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Touchon_accenssions_phylogroups/Cinful_Extraintestinal_Phylo.csv", header=TRUE, sep=",")
+all_data <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Touchon_accenssions_phylogroups/Australian_Dataset.csv", header=TRUE, sep=",")
+CvaB_and_hits <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Supplemental_File_1/Touchon_cinful_output.csv", header=TRUE, sep=",")
+hits_only <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Cinful_Touchon_Hmmer_Hits.csv", header=TRUE, sep=",")
+```
+
+cleaning raw datasets:
+```{r}
+accenssion_phylo <- all_data %>%
+  select(Unique.Name, Strain_Name, Accession.Number, Strain_Category, Phylogroup) %>%
+  rename(accenssion_number = Accession.Number,
+         phylogroup = Phylogroup,
+         name = Unique.Name,
+         strain_category = Strain_Category,
+         strain_name = Strain_Name) %>%
+  unique()
+
+head(accenssion_phylo)
+```
+Calculating microcin hit counts:
+```{r}
+# cleaning data
+microcin_hits <- CvaB_and_hits %>%
+  select(sample, component, hmmerHit) %>%
+  filter(component == "microcins.verified",
+         hmmerHit == "True") %>%
+  select(-hmmerHit) %>%
+  mutate(strain_name = str_sub(sample, 17, -9))
+  
+# counting hits per strain/genome
+microcin_hit_count <- microcin_hits %>%
+  group_by(strain_name) %>%
+  mutate(count = n()) %>%
+  select(strain_name,  count)
+
+all_data_hits <- CvaB_and_hits %>%
+  select(sample) %>%
+  mutate(strain_name = str_sub(sample, 17, -9)) %>%
+  select(-sample) %>%
+  unique()
+  
+microcin_hit_count_2 <- left_join(all_data_hits, microcin_hit_count) %>%
+  mutate(count = ifelse(is.na(count), 0, count)) %>%
+  unique() %>%
+  rename(microcin_hit_count = count)
+
+```
+Calculating CvaB hit counts:
+```{r}
+# cleaning data
+CvaB_hits <- CvaB_and_hits %>%
+  select(sample, component, hmmerHit) %>%
+  filter(component == "CvaB.verified",
+         hmmerHit == "True") %>%
+  select(-hmmerHit) %>%
+  mutate(strain_name = str_sub(sample, 17, -9))
+  
+# counting hits per strain/genome
+CvaB_hit_count <- CvaB_hits %>%
+  group_by(strain_name) %>%
+  mutate(count = n()) %>%
+  select(strain_name,  count)
+
+all_data_hits <- CvaB_and_hits %>%
+  select(sample) %>%
+  mutate(strain_name = str_sub(sample, 17, -9)) %>%
+  select(-sample) %>%
+  unique()
+  
+CvaB_hit_count_2 <- left_join(all_data_hits, CvaB_hit_count) %>%
+  mutate(count = ifelse(is.na(count), 0, count)) %>%
+  unique() %>%
+  rename(CvaB_hit_count = count)
+```
+
+Joining all data into a single dataset:
+```{r}
+Touchon_data <- inner_join(accenssion_phylo, microcin_hit_count_2)
+Touchon_data2 <- inner_join(Touchon_data, CvaB_hit_count_2)
+Touchon_data2
+```
+Getting stats on each group:
+```{r}
+strain_name_stats <- Touchon_data2 %>% 
+  filter(phylogroup == "B2") %>%
+  group_by(strain_category) %>%
+  summarise(microcin_hits = sum(microcin_hit_count),
+            CvaB_hits = sum(CvaB_hit_count)) %>%
+  pivot_longer(cols = c(microcin_hits, CvaB_hits), names_to = "cinful_hits", values_to = "hit_count")
+
+#strain_name_stats
+
+strain_plot <- strain_name_stats %>%
+  ggplot(aes(y = strain_category, x = hit_count, fill = cinful_hits)) +
+  geom_col(position = "dodge", alpha = 0.7) +
+  scale_fill_manual(values = c("#bf8943", "#527530")) +
+  labs(fill = "") +
+  scale_y_discrete(
+    name = "",
+    expand = expansion(mult = c(0, 0))
+  ) +
+  scale_x_continuous(
+    name = "Cinful hit count",
+    expand = expansion(mult = c(0, 0))
+  ) +
+  theme_minimal_grid()
+
+strain_plot
+```
+
+```{r}
+phylogroup_stats <- Touchon_data2 %>% 
+  group_by(phylogroup) %>%
+  summarise(microcin_hits = sum(microcin_hit_count),
+            CvaB_hits = sum(CvaB_hit_count)) %>%
+  pivot_longer(cols = c(microcin_hits, CvaB_hits), names_to = "cinful_hits", values_to = "hit_count")
+
+#phylogroup_stats
+
+phylo_plot <- phylogroup_stats %>%
+  ggplot(aes(y = phylogroup, x = hit_count, fill = cinful_hits)) +
+  geom_col(position = "dodge", alpha = 0.7) +
+  scale_fill_manual(values = c("#bf8943", "#527530")) +
+  labs(fill = "") +
+  scale_y_discrete(
+    name = "Phylogroup",
+    expand = expansion(mult = c(0, 0))
+  ) +
+  scale_x_continuous(
+    name = "Cinful hit count",
+    expand = expansion(mult = c(0, 0))
+  ) +
+  theme_minimal_grid()
+
+phylo_plot
+```
+Filtering for genomes where a CvaB was found but no microcins were found. 
+
+```{r}
+filtered_CvaB <- Touchon_data2 %>%
+  filter(CvaB_hit_count == 1,
+         microcin_hit_count == 0)
+filtered_CvaB
+
+#write.csv(filtered_CvaB, "../../Touchon_datasets/filtered_data/CvaB_found.csv", header=TRUE, sep=",")
+```
+
+Compile large dataset (only working with B2):
+```{r}
+# 4 total entries
+only_CvaB_found <- Touchon_data2 %>%
+  filter(CvaB_hit_count > 0,
+         microcin_hit_count == 0
+         #phylogroup == "B2"
+         )
+
+write.csv(only_CvaB_found, "../../Touchon_datasets/filtered_data/Only_CvaB_found.csv", row.names = FALSE)
+
+# none found
+only_microcin_found_water <- Touchon_data2 %>%
+  filter(CvaB_hit_count == 0,
+         microcin_hit_count > 0,
+         phylogroup == "B2",
+         strain_category == "Water")
+
+# only one found
+only_microcin_found_extraintestinal <- Touchon_data2 %>%
+  filter(CvaB_hit_count == 0,
+         microcin_hit_count > 0,
+         phylogroup == "B2",
+         strain_category == "Human_Extra-intestinal")
+
+# 5 total entries
+both_CvaB_and_microcin_found_water <- Touchon_data2 %>%
+  filter(CvaB_hit_count != 0,
+         microcin_hit_count != 0,
+         phylogroup == "B2",
+         strain_category == "Water")
+
+# 33 total entries
+nothing_found_water <- Touchon_data2 %>%
+  filter(CvaB_hit_count == 0,
+         microcin_hit_count == 0,
+         phylogroup == "B2",
+         strain_category == "Water")
+
+# 35 total entries
+both_CvaB_and_microcin_found_extraint <- Touchon_data2 %>%
+  filter(CvaB_hit_count != 0,
+         microcin_hit_count != 0,
+         phylogroup == "B2",
+         strain_category == "Human_Extra-intestinal")
+
+# 28 total entries
+nothing_found_extraint <- Touchon_data2 %>%
+  filter(CvaB_hit_count == 0,
+         microcin_hit_count == 0,
+         phylogroup == "B2",
+         strain_category == "Human_Extra-intestinal")
+
+```
+Idea: 
+
+Dataset 1:
+All B2
+
+15 Nothing found (water)
+5 both CvaB and microcin found (water) - there were only 5 of these
+
+10 Nothing found (extraintestinal)
+10 both CvaB and microcin found (extraintestinal) (use top 10)
+
+Dataset 2: 
+Not all B2
+
+25 only CvaB found and microcin was not found
+
+```{r}
+# plot for only CvaB found:
+
+phylogroup_stats <- Touchon_data2 %>% 
+  filter(CvaB_hit_count > 0,
+         microcin_hit_count == 0) %>%
+  group_by(phylogroup) %>%
+  summarise(CvaB_hits = sum(CvaB_hit_count)) 
+#phylogroup_stats
+
+phylo_plot <- phylogroup_stats %>%
+  ggplot(aes(y = phylogroup, x = CvaB_hits)) +
+  geom_col(position = "dodge", 
+           alpha = 0.7,
+           fill = "#bf8943") +
+  scale_y_discrete(
+    name = "Phylogroup",
+    expand = expansion(mult = c(0, 0))
+  ) +
+  scale_x_continuous(
+    name = "Cinful hit count",
+    
+    expand = expansion(mult = c(0, 0))
+  ) +
+  geom_text(position = position_stack(vjust = .9), 
+            aes(label = CvaB_hits)) +
+  theme_cowplot()
+
+phylo_plot
+
+```
+```{r}
+strain_name_stats <- Touchon_data2 %>% 
+  filter(CvaB_hit_count > 0,
+         microcin_hit_count == 0) %>%
+  group_by(strain_category) %>%
+  summarise(CvaB_hits = sum(CvaB_hit_count)) 
+
+#strain_name_stats
+
+strain_plot <- strain_name_stats %>%
+  ggplot(aes(y = strain_category, x = CvaB_hits)) +
+ geom_col(position = "dodge", 
+           alpha = 0.7,
+           fill = "#bf8943") +
+  scale_y_discrete(
+    name = "",
+    expand = expansion(mult = c(0, 0))
+  ) +
+  scale_x_continuous(
+    name = "Cinful hit count",
+    
+    expand = expansion(mult = c(0, 0))
+  ) +
+  geom_text(position = position_stack(vjust = .9), 
+            aes(label = CvaB_hits)) +
+  theme_cowplot()
+
+strain_plot
+```
+

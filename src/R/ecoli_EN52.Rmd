@@ -1,0 +1,493 @@
+---
+title: "ecoli_EN52"
+output: html_document
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r}
+# K pneumoniae data:
+
+library(tidyverse)
+library(cowplot)
+options(scipen = 999)
+library(colorspace)
+library(ggridges)
+library(stringr)
+library(ggrepel)
+library(ggpmisc)
+library(gridExtra)
+library(grid)
+
+```
+
+Loading data:
+```{r}
+genome <- "ecoli_857A_EN52"
+annotion_name <- "EN52"
+
+
+
+# loading data:
+microcin_dist <- read.csv(file = "../../microcin_files/distance_bw_microcins.csv", header=TRUE, sep=",")
+E492 <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_E492_sp_vs_", genome, ".csv"), header=TRUE, sep=",")
+G492 <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_G492_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+H47 <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_H47_sp_vs_", genome, ".csv"), header=TRUE, sep=",")
+I47 <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_I47_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+L <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_L_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+M <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_M_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+N <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_N_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+PDI <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_PDI_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+S <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_S_tr_vs_", genome, ".csv"), header=TRUE, sep=",")
+V <- read.csv(file = paste0("../../distance_csvs/", genome, "/distances_V_sp_vs_", genome, ".csv"), header=TRUE, sep=",")
+
+```
+
+
+```{r}
+# genome annotations:
+ecoli <- read.csv(file = paste0("../../genome_annotation_csvs/", annotion_name, "_annotation.csv"), header=TRUE, sep=",")
+head(ecoli)
+```
+
+```{r}
+
+ecoli2 <- ecoli %>%
+  select(c(orf_location, is_microcin)) %>%
+  mutate(label = ifelse(is_microcin == "non-microcin", "black", "red"))
+
+E492_2 <- inner_join(ecoli2, E492)
+
+
+ordered_E492 <- E492_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_E492 <- ordered_E492 %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_E492, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("E492 vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_E492
+
+#ggsave(filename = "../../analysis/figures/ecoli_pcolv-k30/dist_point_E492.png", plot = distance_E492, width = 6, height = 6)
+
+```
+
+```{r}
+
+#------repeating for G492
+G492_2 <- inner_join(ecoli2, G492)
+
+
+ordered_G492 <- G492_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_G492 <- ordered_G492 %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0, NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_G492, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("G492 vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_G492
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_G492.png", plot = distance_G492, width = 6, height = 6)
+```
+
+```{r}
+#------repeating for H47
+H47_2 <- inner_join(ecoli2, H47)
+
+
+ordered_H47 <- H47_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_H47 <- ordered_H47 %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_H47, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("H47 vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_H47
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_H47.png", plot = distance_H47, width = 6, height = 6)
+
+```
+
+```{r}
+#------repeating for I47 
+I47_2 <- inner_join(ecoli2, I47)
+
+
+ordered_I47 <- I47_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_I47 <- ordered_I47 %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_I47, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("I47 vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_I47
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_I47.png", plot = distance_I47, width = 6, height = 6)
+```
+
+```{r}
+
+#------repeating for L 
+L_2 <- inner_join(ecoli2, L)
+
+
+ordered_L <- L_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_L <- ordered_L %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_L, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("L vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_L
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_L.png", plot = distance_L, width = 6, height = 6)
+```
+
+```{r}
+
+#------repeating for M
+M_2 <- inner_join(ecoli2, M)
+
+
+ordered_M <- M_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_M <- ordered_M %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_M, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("M vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_M
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_M.png", plot = distance_M, width = 6, height = 6)
+```
+
+```{r}
+
+#------repeating for N
+N_2 <- inner_join(ecoli2, N)
+
+
+ordered_N <- N_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_N <- ordered_N %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_N, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("N vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_N
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_N.png", plot = distance_N, width = 6, height = 6)
+```
+
+```{r}
+
+#------repeating for PDI 
+PDI_2 <- inner_join(ecoli2, PDI)
+
+
+ordered_PDI <- PDI_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_PDI <- ordered_PDI %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_PDI, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("PDI vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_PDI
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_PDI.png", plot = distance_PDI, width = 6, height = 6)
+```
+
+```{r}
+#------repeating for S
+S_2 <- inner_join(ecoli2, S)
+
+
+ordered_S <- S_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_S <- ordered_S %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_S, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("S vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_S
+
+ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_S.png", plot = distance_S, width = 6, height = 6)
+```
+
+```{r}
+#------repeating for V
+V_2 <- inner_join(ecoli2, V)
+
+
+ordered_V <- V_2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_V <- ordered_V %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) + 
+  geom_text_repel(
+    data = subset(ordered_V, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle(paste0("V vs ", genome)) +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_V
+
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_V.png", plot = distance_V, width = 6, height = 6)
+```
+
+```{r}
+
+#----------------------------------
+#-------using average embedding----
+#----------------------------------
+# genome annotations:
+k_pneum <- read.csv(file = "../../genome_annotation_csvs/EN52_annotation.csv", header=TRUE, sep=",")
+average <- read.csv(file = "../../distance_csvs/ecoli_857A_EN52/distances_average_vs_ecoli_857A_EN52.csv", header=TRUE, sep=",")
+
+k_pneum2 <- k_pneum %>%
+  select(c(orf_location, is_microcin)) %>%
+  mutate(label = ifelse(is_microcin == "non-microcin", "black", "red"))
+
+average2 <- inner_join(k_pneum2, average)
+
+ordered_ave <- average2 %>%
+  slice_min(order_by = distance, n = 50)
+
+# point plot of distances
+distance_ave <- ordered_ave %>%
+  ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
+  geom_point() +
+  scale_color_manual(values = c("black", "red")) +
+  scale_y_discrete(
+    name = "location of ORF in genome") +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = c(0, 0)) +
+  geom_text_repel(
+    data = subset(ordered_ave, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "red") +
+  theme_classic() +
+  ggtitle("Average emb. vs Ecoli 857A") +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_line(color = "grey92", size = 0.5),
+    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+
+distance_ave
+
+# ggsave(filename = "../../analysis/figures/k_pneumoniae/dist_point_average.png", plot = distance_ave, width = 6, height = 6)
+
+```

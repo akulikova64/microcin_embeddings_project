@@ -1,0 +1,121 @@
+---
+title: "Microcin_homology_plot"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(cowplot)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+percent_sim <- read.csv(file = "../../analysis/10_microcin_perc_sim.csv", header=TRUE, sep=",")
+percent_sim
+
+mean <- percent_sim %>%
+  summarise(mean = mean(percent_sim))
+```
+
+
+```{r}
+plot_sim <- percent_sim %>%
+  ggplot(aes(x = percent_sim)) +
+  geom_histogram(fill = "cornsilk2", 
+                 color = "#c4bc97",
+                 alpha = 0.6,
+                 binwidth = 10,
+                 center = 5) +
+  geom_vline(xintercept = 33.5733,
+             color = "darkred",
+             linetype = "longdash") +
+  scale_x_continuous(
+    name = "percent sequence similarity",
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 10),
+    expand =  expansion(add = c(0,3))
+  ) +
+   scale_y_continuous(
+    name = "count",
+    limits = c(0, 22),
+    breaks = seq(0, 22, by = 2),
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  theme_cowplot() +
+  theme(
+    panel.grid.major.y = element_line(color = "grey92", size = 0.5)
+  )
+
+plot_sim
+```
+
+correlating percent sequence similarity and embedding distance 
+```{r}
+microcin_dist <- read.csv(file = "../../microcin_files/distance_bw_microcins.csv", header=TRUE, sep=",")
+
+microcin_dist_clean <- microcin_dist %>%
+  mutate(seq1 = str_sub(microcin1, 0, -4),
+         seq2 = str_sub(microcin2, 0, -4)) %>%
+  select(seq1, seq2, distance)
+
+microcin_dist_clean
+
+```
+
+```{r}
+for_cor <- left_join(percent_sim, microcin_dist_clean)
+
+for_cor
+
+```
+
+```{r}
+library(ggpubr)
+
+cor_plot <- for_cor %>%
+  ggplot(aes(x = percent_sim, y = distance)) +
+  geom_point() +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = "maroon",
+              formula = y ~ x) +
+  stat_regline_equation(label.y = 3.3, label.x = 55, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 3, label.x = 55, aes(label = ..rr.label..)) +
+  scale_x_continuous(
+    name = "percent sequence similarity",
+    limits = c(25, 85),
+    breaks = seq(20, 80, by = 10),
+    expand =  expansion(add = c(0,0))
+  ) +
+   scale_y_continuous(
+    name = "distance",
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  theme_cowplot()
+
+cor_plot
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
