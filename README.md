@@ -15,7 +15,7 @@ src/ - R and python scripts for data processing
 
 1) python/run_pipeline2.py - pipeline for microcin search. It extracts ORFs, filters ORFs, annotates known microcin ORFs, runs esm1-b to generate embeddings, calculates semantic distance with known microins and averaged microcin embedding. 
 
-2) python/run_blastp.py - Runs protein blast using the 10 known microcins sequences are queries.
+2) python/run_blastp.py - Runs protein blast using the 10 known microcins sequences as queries.
 
 <br />
 
