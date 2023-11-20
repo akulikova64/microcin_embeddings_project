@@ -10,11 +10,10 @@ analysis/figures/ - contains all plots and figures with distances
 src/ - R and python scripts for data processing
 
 <br />
-<br />
 
 ### Scripts for data preparation:
 
-1) python/run_pipeline2.py - pipeline for microcin search. It etractst ORFs, filters ORFs, annotates known microcin ORFs, runs esm1-b to generate embeddings, calculates semantic distance with known microins and averaged microcin embedding. 
+1) python/run_pipeline2.py - pipeline for microcin search. It extracts ORFs, filters ORFs, annotates known microcin ORFs, runs esm1-b to generate embeddings, calculates semantic distance with known microins and averaged microcin embedding. 
 
 2) python/run_blastp.py - Runs protein blast using the 10 known microcins sequences are queries.
 
