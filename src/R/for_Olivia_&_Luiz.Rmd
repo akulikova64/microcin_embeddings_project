@@ -1,0 +1,212 @@
+---
+title: "for_Olivia_&_Luiz"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(cowplot)
+```
+
+Run with caution
+```{r}
+metadata <- read.csv(file = "../../info/pfam_metadata.csv", header=TRUE, sep=",")
+
+```
+
+```{r}
+nested <- metadata %>%
+  nest(embedding = c(X0:X1279))
+```
+
+```{r}
+rm("metadata")
+```
+
+Use only the groups that Olivia has sent:
+```{r}
+chosen_ids <- c(887, 1675, 814, 4493, 5145, 2520, 1791, 1962, 1752, 667, 1721, 1265, 1867, 2340, 1829, 1944, 250, 29, 743, 378)
+```
+
+```{r}
+filtered <- nested %>%
+  filter(Group.ID %in% chosen_ids)
+
+```
+
+```{r}
+counts_all <- nested %>%
+  group_by(Group.ID) %>%
+  count()
+
+counts_filtered <- filtered %>%
+  group_by(Group.ID) %>%
+  count()
+```
+
+```{r}
+rm("nested")
+```
+
+=====================================================================================
+***START HERE******
+=====================================================================================
+
+
+1. We will get just protein name combinations 
+```{r}
+group <- 29
+
+interest_group_data <- filtered %>%
+  filter(Group.ID == group)
+```
+
+```{r}
+# combinations <- expand.grid(protein1 = interest_group_data$Protein_ID,
+#                             protein2 = interest_group_data$Protein_ID)
+
+
+# here you would also take a subsample (so that soo many combinations are not made)
+library(gtools)
+interest_group_count <- nrow(interest_group_data)
+combinations <- combinations(n = interest_group_count, r = 2, v = interest_group_data$Protein_ID, repeats.allowed = FALSE)
+combinations <- as.data.frame(combinations)
+
+combinations <- combinations %>%
+  rename("protein_1" = "V1",
+         "protein_2" = "V2")
+
+```
+
+Here we get the dataframe with embeddings side by side:
+```{r}
+protein_1 <- interest_group_data %>%
+  select(Protein_ID, embedding) %>%
+  rename("protein_1" = Protein_ID)
+
+left_df <- left_join(combinations, protein_1) %>%
+  rename("embedding_1" = embedding)
+
+protein_2 <- interest_group_data %>%
+  select(Protein_ID, embedding) %>%
+  rename("protein_2" = Protein_ID)
+
+all_df <- left_join(left_df, protein_2) %>%
+  rename("embedding_2" = embedding) 
+
+```
+
+
+3. Calculating distance: run with caution (takes forever)
+```{r}
+CalculateEuclideanDistance <- function(vect1, vect2) sqrt(sum((vect1 - vect2)^2))
+
+with_distance <- all_df %>%
+  mutate(distance = map2(all_df$embedding_1, all_df$embedding_2, CalculateEuclideanDistance))
+```
+
+```{r}
+inner_distances <- with_distance %>%
+  select(-c(embedding_1, embedding_2)) %>%
+  mutate(group = "within_group")
+```
+
+4. We will get new combinations for across groups:
+```{r}
+# get proteins not including interest group
+outer_proteins <- filtered %>%
+  filter(!Protein_ID %in% chosen_ids)
+```
+
+```{r}
+inner_group_count <- nrow(interest_group_data)
+outer_protein_sample <- sample_n(outer_proteins, inner_group_count) %>%
+  rename("protein_2" = Protein_ID)
+
+combinations2 <- expand.grid(interest_group_data$Protein_ID, outer_protein_sample$protein_2) %>%
+  rename("protein_1" = "Var1",
+         "protein_2" = "Var2") 
+
+```
+
+joining inner data with outer data:
+```{r}
+outer_protein_1 <- interest_group_data %>%
+  select(Protein_ID, embedding) %>%
+  rename("protein_1" = Protein_ID)
+
+outer_left_df <- left_join(combinations2, protein_1) %>%
+  rename("embedding_1" = embedding)
+
+outer_protein_2 <- outer_protein_sample %>%
+  select(protein_2, embedding)
+
+outer_all_df <- left_join(outer_left_df, outer_protein_2) %>%
+  rename("embedding_2" = embedding) 
+```
+
+finding distance (Run with caution! takes forever!)
+```{r}
+with_distance_outer <- outer_all_df %>%
+  mutate(distance = map2(outer_all_df$embedding_1, outer_all_df$embedding_2, CalculateEuclideanDistance))
+```
+
+```{r}
+outer_distances <- with_distance_outer %>%
+  select(-c(embedding_1, embedding_2)) %>%
+  mutate(group = "across_groups")
+```
+
+5. We will combine inner and outer data
+```{r}
+for_plot <- rbind(inner_distances, outer_distances)
+for_plot$distance <- as.numeric(for_plot$distance)
+```
+
+6. Making plot:
+```{r}
+plot <- for_plot %>%
+  select(distance, group) %>%
+  ggplot(aes(x = distance, fill = group)) +
+  geom_density(alpha = 0.5,
+               color = NA) +
+  #geom_jitter(aes(x = distance, y = 0, height =  0.01)) +
+  scale_fill_brewer(palette = "Dark2",
+                    labels = c("across groups", "within group")) +
+  ggtitle(paste("Group:", group, "Sample size:", inner_group_count)) +
+  scale_x_continuous(expand = expansion(add = 0)) +
+  scale_y_continuous(expand = expansion(add = 0)) +
+  labs(fill = "") +
+  theme_cowplot() +
+  theme(legend.position = "top")
+
+plot
+```
+
+```{r}
+ggsave(filename = paste0("../../analysis/figures/for_Olivia_and_Luiz/distances_", group,".png"), plot = plot, width = 7, height = 6)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

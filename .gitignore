@@ -11,3 +11,6 @@ genome_files
 microcin_files
 ORF_files
 Touchon_datasets
+analysis/ecoli_L_perc_sim.csv
+info/pfam_metadata.csv
+info/pfam_metadata.pkl

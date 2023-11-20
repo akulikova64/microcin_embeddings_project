@@ -85,3 +85,4 @@ variance <- pca_fit %>%
   ) +
   theme_classic()
 variance
+

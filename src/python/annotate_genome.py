@@ -4,6 +4,7 @@ from Bio.Seq import Seq
 import sys
 import csv
 import re
+import os
 
 # this script annotates genome for known microcins. 
 
@@ -16,13 +17,25 @@ def get_alignment_score(orf_seq, microcin_seq):
 
     return alignment
 
-input_path_microcins =  "../../microcin_files/Microcins_Known.fasta"
-input_path_orfs = "../../ORF_files/ORFs_ecoli_H47/protein_ORFs_ecoli_H47_filtered.fasta"
-output_path = "../../genome_annotation_csvs/ecoli_H47_annotation.csv" # output path contains the orf ID and whether or not it's a microcin. 
+genome = sys.argv[1]
+dataset = sys.argv[2]
+
+input_path_microcins =  "../../microcin_files/45_microcins.fasta"
+
+input_path_orfs = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/protein_ORFs_" + genome + "_filtered.fasta"
+input_folder_orfs = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/"
+isExist = os.path.exists(input_folder_orfs)
+if not isExist:
+   os.makedirs(input_folder_orfs)
+
+output_path = "../../genome_annotation_csvs/" + dataset + "/" + genome + "_annotation.csv" # output path contains the orf ID and whether or not it's a microcin. 
+output_folder = "../../genome_annotation_csvs/" + dataset + "/"
+isExist = os.path.exists(output_folder)
+if not isExist:
+   os.makedirs(output_folder)
 
 #input_path_orfs = "../../ORF_files/ORFs_ecoli_nissle/protein_ecoli_nissle_orfs.fasta"
 #output_path = "../../genome_annotation_csvs/ecoli_nissle_annotation.csv" # output path contains the orf ID and whether or not it's a microcin. 
-
 
 microcin_list = list(SeqIO.parse(input_path_microcins, "fasta"))
 orf_list = list(SeqIO.parse(input_path_orfs, "fasta"))
@@ -45,12 +58,12 @@ with open(output_path, "w") as CSV_file:
         orf_sequence = str(rec.seq)
         orf_description = str(rec.description)
         split_orf = re.split(r'[_.() ]', orf_description)
-        # print(orf_description)
-        # print(split_orf)
-        # print()
-        orf_number = split_orf[4]
-        orf_strand = "(" + split_orf[6] + ")"
-        orf_location = split_orf[5]
+        #print(orf_description)
+        #print(split_orf)
+        #sys.exit()
+        orf_number = split_orf[3]
+        orf_strand = "(" + split_orf[5] + ")"
+        orf_location = split_orf[4]
 
         for rec in microcin_list:
             microcin_sequence = str(rec.seq)
@@ -59,6 +72,7 @@ with open(output_path, "w") as CSV_file:
 
             # get alignment of orf and microcin, update winning microcin 
             alignment = get_alignment_score(orf_sequence, microcin_sequence)
+            #print(alignment.formatted(orf_sequence, microcin_sequence))
             alignment_score = alignment.score
 
             if alignment_score > higheset_score:
@@ -71,7 +85,7 @@ with open(output_path, "w") as CSV_file:
                 count_found += 1
                 microcin_found = microcin_name
                 break  
-            elif alignment_score > 30:
+            elif alignment_score >= len(microcin_sequence) - 20:
                 found_microcins[orf_number] = microcin_name
                 count_found += 1
                 microcin_found = microcin_name 

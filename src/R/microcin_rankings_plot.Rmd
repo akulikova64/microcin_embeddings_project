@@ -30,13 +30,18 @@ rankings_clean <- rankings %>%
   mutate(found_self = ifelse(query == found_microcin, "self", "non-self_find")) %>%
   filter(found_microcin != "V_sp") %>%
   mutate(found_microcin = ifelse(found_microcin == "L_tr", "L", found_microcin),
-         found_microcin = ifelse(found_microcin == "N_tr", "N", found_microcin))
+         found_microcin = ifelse(found_microcin == "N_tr", "N", found_microcin),
+         found_microcin = ifelse(found_microcin == "PDI_tr", "PDI", found_microcin),
+         found_microcin = ifelse(found_microcin == "S_tr", "S", found_microcin)) %>%
+  mutate(found_microcin = fct_relevel(found_microcin, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")) %>%
+  mutate(query = fct_relevel(query, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI"))
   
 #rankings_clean$rank = as.factor(rankings_clean$rank)
 
 tile_plot <- rankings_clean %>%
-  ggplot(aes(x = query, y = found_microcin, fill = factor(rank))) +
-  geom_tile() +
+  ggplot(aes(x = query, y = fct_rev(found_microcin), fill = factor(rank))) +
+  geom_tile(colour = "#484884",
+            size = 0.4) +
   geom_text(aes(
     label = rank),
     color = "grey40", 
@@ -54,19 +59,20 @@ tile_plot <- rankings_clean %>%
   theme(
     panel.background = element_blank(),
     axis.text = element_text(color = "black", size = 12),
-    legend.position = "none")
+    legend.position = "none") +
+  coord_equal()
   
 tile_plot
 
-ggsave(filename = "../../analysis/figures/microcin_rankings_plot.png", plot = tile_plot, width = 7, height = 6)
+ggsave(filename = "../../analysis/figures/microcin_rankings_plot.png", plot = tile_plot, width = 7, height = 8)
 ```
  
 ```{r}
 
 rankings_clean2 <- rankings_clean %>%
-  mutate(found = ifelse(rank > 5, "microcin not in top 5 hits", "finds non-self microcin in top 5 hits")) %>%
-  mutate(found = ifelse(found_microcin == query, "finds self in top 5 hits", found)) %>%
-  mutate(found_microcin = fct_relevel(found_microcin, "V", "N", "L", "E492", "G492", "I47", "H47", "M")) %>%
+  mutate(found = ifelse(rank > 5, "microcin not found", "finds non-self microcin")) %>%
+  mutate(found = ifelse(found_microcin == query, "finds self", found)) %>%
+  mutate(found_microcin = fct_relevel(found_microcin, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")) %>%
   mutate(query = fct_relevel(query, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI"))
 rankings_clean2
  
@@ -76,8 +82,8 @@ rankings_clean2
 ```{r}
 tile_plot2 <- rankings_clean2 %>%
   ggplot(aes(x = query, y = fct_rev(found_microcin), fill = found)) +
-  geom_tile(colour = "#9e7b78",
-            size = 0.5) +
+  #geom_tile(colour = "#9e7b78", size = 0.5) +
+  geom_tile(colour = "#9c8a89", size = 0.3) +
   scale_x_discrete(
     name = "query embedding",
     expand = c(0,0)
@@ -87,14 +93,157 @@ tile_plot2 <- rankings_clean2 %>%
     expand = c(0,0)
   ) +                                   
   scale_fill_manual(values = c("#c2d9ff", "#81a4de", "#942e23")) +     #old color: c2d9ff
-  theme_cowplot(12) +
+  theme_cowplot(14) +
   labs(fill = "") +
   theme(
-    axis.text = element_text(color = "black", size = 12),
-    legend.position = "top")
+    axis.text = element_text(color = "black", size = 10),
+    legend.position = "top",
+    plot.margin = margin(0, 0, 0, 6)) +
+  #guides(fill = guide_legend(nrow=3, byrow=TRUE)) +
+  coord_equal()
   
 tile_plot2
 
-ggsave(filename = "../../analysis/figures/microcin_rankings_groups.png", plot = tile_plot2, width = 7, height = 6)
+#ggsave(filename = "../../analysis/figures/microcin_rankings_groups.png", plot = tile_plot2, width = 6, height = 7)
  
 ```
+Plotting the blast resuts:
+```{r}
+blast <- read.csv(file = "../../analysis/rankings/blastp_rankings/10_known_microcin_blast_finds.csv", header=TRUE, sep=",")
+blast
+
+```
+
+
+```{r}
+clean_blast <- blast %>%
+  #filter(alignment_length >= 30) %>%
+  mutate(perc_mismatch = num_mismatches/alignment_length*100) #%>%
+  #filter(perc_mismatch < 80) 
+
+clean_blast
+  
+  #select(is_microcin, query) %>%
+  #mutate(found = "hit") 
+
+
+#microcins <- c("V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")
+```
+```{r}
+clean_blast2 <- clean_blast %>%
+  rename(found_microcin = is_microcin) %>%
+  mutate(found_microcin = ifelse(found_microcin == "L_tr", "L", found_microcin),
+         found_microcin = ifelse(found_microcin == "N_tr", "N", found_microcin),
+         found_microcin = ifelse(found_microcin == "PDI_tr", "PDI", found_microcin),
+         found_microcin = ifelse(found_microcin == "S_tr", "S", found_microcin),
+         found_microcin = ifelse(found_microcin == "V_sp", "V", found_microcin)) %>%
+  mutate(found_microcin = fct_relevel(found_microcin, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")) %>%
+  mutate(query = fct_relevel(query, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")) %>%
+  mutate(group = ifelse(query == found_microcin, "finds self", "finds non-self microcin"))
+  
+
+clean_blast2
+  
+```
+Adding in missing values:
+```{r}
+found_microcin <- c("V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")
+query <- c("V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")
+
+combos <- expand.grid(found_microcin, query) %>%
+  rename(
+    found_microcin = Var1,
+    query = Var2) 
+
+clean_blast3 <- clean_blast2 %>%
+  select(found_microcin, query, group)
+
+
+joined <- right_join(clean_blast3, combos) 
+joined2 <- joined %>%
+  mutate(group = ifelse(is.na(group), "microcin not found", group))
+joined2
+
+
+```
+
+
+
+```{r}
+
+tile_plot_blast <- joined2 %>%
+  ggplot(aes(x = query, y = fct_rev(found_microcin), fill = group)) +
+  #geom_tile(colour = "#7586a3", size = 0.5) +
+  geom_tile(colour = "#838d9e", size = 0.3) +
+  scale_x_discrete(
+    name = "query sequence",
+    expand = c(0,0)
+  ) +
+  scale_y_discrete(
+    name = "found microcin",
+    expand = c(0,0)
+  ) +                                   
+  scale_fill_manual(values = c("#c2d9ff", "#81a4de", "#942e23")) +     #old color:  "#942e23"
+  theme_cowplot(14) +
+  labs(fill = "") +
+  theme(
+    axis.text = element_text(color = "black", size = 10),
+    legend.position = "top",
+    plot.margin = margin(0, 0, 0, 6)) +
+  #guides(fill = guide_legend(nrow=3, byrow=TRUE)) +
+  coord_equal()
+  
+tile_plot_blast
+
+#ggsave(filename = "../../analysis/figures/blast_rankings_groups.png", plot = tile_plot_blast, width = 6, height = 7)
+
+```
+Arranging plots into single row:
+```{r}
+prow <- plot_grid(
+  tile_plot2 + theme_cowplot(17) +
+               theme(legend.position="none", 
+                     axis.text = element_text(color = "black", size = 16),
+                     plot.margin = margin(0, 0, 0, 30),
+                     axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)),
+  tile_plot_blast + theme_cowplot(17) +
+                    theme(legend.position="none", 
+                          axis.text = element_text(color = "black", size = 16),
+                          plot.margin = margin(0, 0, 0, 30),
+                          axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)),
+  align = 'vh',
+  labels = c("a", "b"),
+  hjust = -3,
+  vjust = 1,
+  nrow = 1,
+  label_size = 20
+)
+prow
+```
+
+
+Extracting legend separate legend:
+```{r}
+legend <- get_legend(
+  # create some space to the left of the legend
+  tile_plot2 + theme(legend.box.margin = margin(0, 0, 0, 152),
+                     legend.text = element_text(color = "black", size = 17)) +
+               guides(color = "none")
+)
+```
+
+Making a compound figure:
+```{r}
+two_plots <- plot_grid(prow, legend, ncol = 1, rel_heights = c(1, .1))
+two_plots
+ggsave(filename = "../../analysis/figures/compound_fig_final.png", plot = two_plots, width = 9.5, height = 5.4)
+
+
+```
+
+
+
+
+
+
+

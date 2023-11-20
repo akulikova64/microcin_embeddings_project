@@ -40,3 +40,5 @@ for genome in genome_list:
         # run blast:
         command = "blastp -subject " + subject + " -query " + query + " -out " + output + " -evalue " + e_value + " -outfmt " + output_format + " -max_target_seqs " + max_target_seqs
         os.system(command)
+
+print("Done! :-)")

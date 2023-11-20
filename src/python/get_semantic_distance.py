@@ -19,15 +19,25 @@ def get_distance(emb_1, emb_2):
     
     return distance
 
+genome = sys.argv[1]
+dataset = sys.argv[2]
+
 input_path_microcins =  "../../microcin_files/Microcins_Known_emb_esm1b/"
-input_path_orfs = "../../embeddings/genome_embeddings_ecoli_N/" 
-genome = "ecoli_N"
+
+input_path_orfs = "../../embeddings/" + dataset + "/genome_embeddings_" + genome + "/" 
+isExist = os.path.exists(input_path_orfs)
+if not isExist:
+   os.makedirs(input_path_orfs)
 
 microcin_list = os.listdir(input_path_microcins)
 
 for microcin in microcin_list:
     microcin_name = microcin.split("|")[0]
-    output_path = "../../distance_csvs/" + genome + "/distances_" + microcin_name + "_vs_" + genome + ".csv"
+    output_path = "../../distance_csvs/" + dataset + "/" + genome + "/distances_" + microcin_name + "_vs_" + genome + ".csv"
+    output_folder = "../../distance_csvs/" + dataset + "/" + genome + "/"
+    isExist = os.path.exists(output_folder)
+    if not isExist:
+        os.makedirs(output_folder)
 
     with open(output_path, "w") as CSV_file:
         writer = csv.writer(CSV_file)

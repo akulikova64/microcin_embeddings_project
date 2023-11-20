@@ -78,18 +78,18 @@ for_cor
 library(ggpubr)
 
 cor_plot <- for_cor %>%
-  ggplot(aes(x = percent_sim, y = distance)) +
+  ggplot(aes(x = (100 - percent_sim), y = distance)) +
   geom_point() +
   geom_smooth(method = "lm", 
               se = FALSE,
               color = "maroon",
               formula = y ~ x) +
-  stat_regline_equation(label.y = 3.3, label.x = 55, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 3, label.x = 55, aes(label = ..rr.label..)) +
+  #stat_regline_equation(label.y = 3.3, label.x = 55, aes(label = ..eq.label..)) +
+  #stat_regline_equation(label.y = 3, label.x = 55, aes(label = ..rr.label..)) +
   scale_x_continuous(
-    name = "percent sequence similarity",
-    limits = c(25, 85),
-    breaks = seq(20, 80, by = 10),
+    name = "percent sequence divergence",
+    limits = c(10, 80),
+    breaks = seq(10, 80, by = 10),
     expand =  expansion(add = c(0,0))
   ) +
    scale_y_continuous(
@@ -102,20 +102,336 @@ cor_plot
 
 ```
 
+Adding non-microcin datapoints to plot above:
+```{r}
+nonmicrocin_dist <- read.csv(file = "../../microcin_files/distance_bw_nonmicrocins.csv", header=TRUE, sep=",")
+nonmicrocin_dist
+
+nonmic_percent_sim <- read.csv(file = "../../analysis/non-microcin_perc_sim.csv", header=TRUE, sep=",")
+nonmic_percent_sim
+
+```
+
+```{r}
+#for_cor <- left_join(nonmic_percent_sim, nonmicrocin_dist)
+#for_cor
 
 
+```
+
+```{r}
+library(ggpubr)
+
+cor_plot <- for_cor %>%
+  ggplot(aes(x = (100 - percent_sim), y = distance)) +
+  geom_point() +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = "maroon",
+              formula = y ~ x) +
+  #stat_regline_equation(label.y = 3.3, label.x = 55, aes(label = ..eq.label..)) +
+  #stat_regline_equation(label.y = 3, label.x = 55, aes(label = ..rr.label..)) +
+  scale_x_continuous(
+    name = "percent sequence divergence",
+    limits = c(10, 95),
+    breaks = seq(10, 95, by = 10),
+    expand =  expansion(add = c(0,0))
+  ) +
+   scale_y_continuous(
+    name = "distance",
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  theme_cowplot()
+
+cor_plot
+
+```
+I'm going to take ecoli L genome ORFs and sample for percent similarity:
+```{r}
+#PDI_percent_sim <- read.csv(file = "../../analysis/ecoli_L_perc_sim.csv", header=TRUE, sep=",")
+```
+
+```{r}
+get_sim_bin <- function(x) {
+  
+  if (x > 0 & x <= 10) {
+    return("(0-10]")
+  }
+  else if (x > 10 & x <= 20) {
+    return("(10-20]")
+  }
+  else if (x > 20 & x <= 30) {
+    return("(20-30]")
+  }
+  else if (x > 30 & x <= 40) {
+    return("(30-40]")
+  }
+  else if (x > 40 & x <= 50) {
+   return("(40-50]")
+  }
+  else if (x > 50 & x <= 60) {
+    return("(50-60]")
+  }
+  else if (x > 60 & x <= 70) {
+    return("(60-70]")
+  }
+  else if (x > 70 & x <= 80) {
+    return("(70-80]")
+  }
+  else if (x > 80 & x <= 90) {
+    return("(80-90]")
+  }
+  else if (x > 90 & x <= 100) {
+    return("(90-100]")
+  }
+}
+
+get_sim_bin2 <- function(x) {
+  
+  if (x > 0 & x <= 20) {
+    return("(0-20]")
+  }
+  else if (x > 20 & x <= 40) {
+    return("(20-40]")
+  }
+  else if (x > 40 & x <= 60) {
+    return("(40-60]")
+  }
+  else if (x > 60 & x <= 80) {
+    return("(60-80]")
+  }
+  else if (x > 80 & x <= 100) {
+   return("(80-100]")
+  }
+}
+
+grouped <- PDI_percent_sim %>%
+  mutate(sim_group = map_chr(percent_sim, get_sim_bin2)) %>%
+  mutate(sim_group2 = map_chr(percent_sim, get_sim_bin))
+
+grouped
+```
+
+```{r}
+count <- grouped %>%
+  group_by(sim_group2) %>%
+  count()
+count
+
+# count_plot <- grouped %>%
+#   ggplot(aes(x = sim_group)) +
+#   geom_bar()
+# 
+# count_plot
+  
+```
+
+```{r}
+sampled <- grouped %>%
+  group_by(sim_group2) %>%
+  filter(sim_group2 != "(90-100]",
+         sim_group2 != "(80-90]",
+         sim_group2 != "(70-80]") %>%
+  sample_n(25)
+
+last_sample <- grouped %>%
+  filter(sim_group2 == "(90-100]" |
+         sim_group2 == "(80-90]" |
+         sim_group2 == "(70-80]")
+
+```
+
+```{r}
+last_sample
+sampled2 <- rbind(sampled, last_sample)
+sampled2
+
+```
+
+```{r}
+
+#write.csv(sampled2, "../../analysis/194_sampled_ORFs_by_perc_sim.csv", row.names = FALSE)
+
+```
+
+```{r}
+perc_sim <- read.csv(file = "../../analysis/194_sampled_ORFs_by_perc_sim.csv", header=TRUE, sep=",")
+perc_sim
+
+distances <- read.csv(file = "../../analysis/distance_bw_nonmicrocins_L_194.csv", header=TRUE, sep=",")
+distances
+
+all_joined <- left_join(perc_sim, distances)
+all_joined
+```
+```{r}
+
+cor_plot <- all_joined %>%
+  ggplot(aes(x = (100 - percent_sim), y = distance)) +
+  geom_point() +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = "maroon",
+              formula = y ~ x) +
+  #stat_regline_equation(label.y = 3.3, label.x = 55, aes(label = ..eq.label..)) +
+  #stat_regline_equation(label.y = 3, label.x = 55, aes(label = ..rr.label..)) +
+  scale_x_continuous(
+    name = "percent sequence divergence",
+    limits = c(0, 105),
+    breaks = seq(0, 100, by = 10),
+    expand =  expansion(add = c(5,0))
+  ) +
+   scale_y_continuous(
+    name = "distance",
+    limits = c(0, 10),
+    breaks = seq(0, 10, by = 2),
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  theme_cowplot()
+
+cor_plot
 
 
+```
+
+Putting everything in one plot:
+```{r}
+
+orfs <- all_joined %>%
+  select(distance, percent_sim) %>%
+  mutate(group = "ORF pairs")
+
+microcins <- for_cor %>%
+  select(distance, percent_sim) %>%
+  mutate(group = "microcin pairs")
+
+all_data <- rbind(orfs, microcins) 
+all_data <- all_data %>%
+  mutate(perc_div = 100 - percent_sim)
+all_data
+```
+
+```{r}
+cor_plot <- all_data %>%
+  ggplot(aes(x = (100 - percent_sim), y = distance, fill = group, color = group)) +
+  geom_point(size = 2.5,
+             shape = 21) +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              formula = y ~ x,
+              size = 0.5) +
+  #stat_regline_equation(label.y = 3.3, label.x = 55, aes(label = ..eq.label..)) +
+  #stat_regline_equation(label.y = 3, label.x = 55, aes(label = ..rr.label..)) +
+  scale_x_continuous(
+    name = "percent sequence divergence",
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 10),
+    expand =  expansion(add = c(0,0.6))
+  ) +
+   scale_y_continuous(
+    name = "distance",
+    limits = c(0, 10),
+    breaks = seq(0, 10, by = 2),
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  labs(fill = "", color = "") +
+  scale_fill_manual(values = c("#ffb22e", "#C4D9FA")) +
+  scale_color_manual(values = c("#fc8f00", "#8494AF")) +
+  theme_cowplot(16) +
+  theme(legend.position = c(0.05, 0.95))
+
+cor_plot
+#ggsave(filename = "../../analysis/figures/distance_vs_seq_sim.png", plot = cor_plot, width = 7, height = 4.5)
 
 
+```
 
+```{r}
 
+#color_microcin <- c("predicted microcin" = "#ad1503") 
 
+cor_plot <- ggplot() +
+  geom_point(data = all_data,
+             aes(x = (100 - percent_sim), y = distance, fill = group, color = group),
+             size = 2.5,
+             shape = 21) +
+  geom_smooth(data = all_data,
+              aes(x = (100 - percent_sim), y = distance, fill = group, color = group),
+              method = "lm", 
+              se = FALSE,
+              formula = y ~ x,
+              size = 0.5) +
+  geom_point(data = new_microcin, 
+             aes(x = sequence_divergence, y = distance, 
+                 color = "predicted microcin pairs", 
+                 fill = "predicted microcin pairs"),
+             size = 2.7,
+             shape = 21,
+             #fill = "red",
+             #color = "#ad1503",
+             stroke = 0.7) +
+  scale_x_continuous(
+    name = "percent sequence divergence",
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 10),
+    expand =  expansion(add = c(0,0.8))
+  ) +
+   scale_y_continuous(
+    name = "distance",
+    limits = c(0, 10),
+    breaks = seq(0, 10, by = 2),
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  labs(fill = "", color = "") +
+  scale_fill_manual(values = c("#ffb22e", "#C4D9FA", "red")) +
+  scale_color_manual(values = c("#fc8f00", "#8494AF", "#ad1503")) +
+  theme_cowplot(16) +
+  theme(legend.position = c(0.05, 0.95))
 
+cor_plot
+ggsave(filename = "../../analysis/figures/new_microcin_three_groups.png", plot = cor_plot, width = 7, height = 4.5)
 
+```
 
+```{r}
+library(ggrepel)
 
+new_microcin <- read.csv(file = "../../microcin_files/new_microcin_analysis_homologs.csv", header=TRUE, sep=",")
 
+cor_plot2 <- new_microcin %>%
+  ggplot(aes(x = sequence_divergence, y = distance)) +
+  geom_hline(yintercept = 5, color = "gray70") +
+  geom_vline(xintercept = 50, color = "gray70") +
+  geom_text_repel(
+    data = new_microcin,
+    aes(
+      label = microcin),
+    max.overlaps = Inf,
+    box.padding = 0.7,
+    color = "black"
+  ) +
+  geom_point(size = 2.5,
+             shape = 21,
+             color = "#fc8f00",
+             fill = "#ffb22e") +
+  scale_x_continuous(
+    name = "percent sequence divergence",
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 10),
+    expand =  expansion(add = c(0,0.7))
+  ) +
+   scale_y_continuous(
+    name = "distance",
+    limits = c(0, 10),
+    breaks = seq(0, 10, by = 2),
+    expand =  expansion(add = c(0,0.5))
+  ) +
+  theme_cowplot(16) 
+
+cor_plot2
+
+ggsave(filename = "../../analysis/figures/new_microcin_cluster.png", plot = cor_plot2, width = 7, height = 4.5)
+```
 
 
 

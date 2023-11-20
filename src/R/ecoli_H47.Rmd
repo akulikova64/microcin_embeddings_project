@@ -61,36 +61,100 @@ E492_2 <- inner_join(ecoli2, E492)
 
 
 ordered_E492 <- E492_2 %>%
-  slice_min(order_by = distance, n = 50)
+  slice_min(order_by = distance, n = 10)
 
 # point plot of distances
 distance_E492 <- ordered_E492 %>%
   ggplot(aes(y = fct_reorder(orf_location, distance), x = distance, color = label)) +
-  geom_point() +
-  scale_color_manual(values = c("black", "red")) +
+  geom_point(size = 7) +
+  scale_color_manual(values = c("#598db5", "#fc8f00")) +
   scale_y_discrete(
-    name = "location of ORF in genome") +
+    name = "ORF") +
   scale_x_continuous(
     limits = c(0,NA),
     breaks = seq(0, 10, by = 1),
-    expand = c(0, 0)) + 
+    expand = expansion(add = c(0, 0.1))) + 
+  geom_text_repel(
+    data = subset(ordered_E492, is_microcin != "non-microcin"),
+    aes(
+      label = is_microcin),
+    max.overlaps = 0,
+    box.padding = 1,
+    size = 12,
+    color = "red") +
+  theme_classic() +
+  #ggtitle(paste0("E492 vs ", genome)) +
+  #ggtitle(paste0("E492 vs E.coli H47")) +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(color = "black", size = 12),
+    axis.title=element_text(size=42),
+    plot.title=element_text(size=22),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    panel.grid.major = element_line(color = "grey70", size = 0.5))
+    #panel.grid.minor.x = element_line(color = "grey70", size = 0.5))
+
+distance_E492
+
+ggsave(filename = "../../analysis/figures/dist_point_E492_ecoliH47_20.png", plot = distance_E492, width = 6, height = 5)
+
+```
+For paper:
+```{r}
+
+ecoli2 <- ecoli %>%
+  select(c(orf_location, is_microcin)) %>%
+  mutate(label = ifelse(is_microcin == "non-microcin", "black", "red"))
+
+E492_2 <- inner_join(ecoli2, E492)
+
+
+ordered_E492 <- E492_2 %>%
+  slice_min(order_by = distance, n = 50) %>%
+  mutate(orf_num = row_number())
+
+ordered_E492$orf_num = as.numeric(ordered_E492$orf_num)
+
+# point plot of distances
+distance_E492 <- ordered_E492 %>%
+  ggplot(aes(y = orf_num, x = distance, color = label)) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = c("#598db5", "#fc8f00")) +
+  scale_y_continuous(
+    name = "ORF ranking",
+    # limits = c(0, 50),
+    #breaks = seq(0, 50, by = 5),
+    #labels = seq(0, 50, by = 5)
+    expand = expansion(add = c(0, 0))
+    ) +
+  scale_x_continuous(
+    limits = c(0,NA),
+    breaks = seq(0, 10, by = 1),
+    expand = expansion(add = c(0, 0.1))) + 
   geom_text_repel(
     data = subset(ordered_E492, is_microcin != "non-microcin"),
     aes(
       label = is_microcin),
     max.overlaps = Inf,
-    box.padding = 0.7,
+    box.padding = 0.8,
+    size = 5,
     color = "red") +
   theme_classic() +
-  ggtitle(paste0("E492 vs ", genome)) +
+  #ggtitle(paste0("E492 vs ", genome)) +
+  #ggtitle(paste0("E492 vs E.coli H47")) +
   theme(
     legend.position = "none",
-    panel.grid.major = element_line(color = "grey92", size = 0.5),
-    panel.grid.minor.x = element_line(color = "grey92", size = 0.5))
+    axis.text = element_text(color = "black", size = 12),
+    axis.title=element_text(size=20),
+    #plot.title=element_text(size=22),
+    #axis.text.y = element_blank(),
+    panel.grid.major = element_line(color = "grey90", size = 0.5))
+    #panel.grid.minor.x = element_line(color = "grey70", size = 0.5))
 
 distance_E492
 
-#ggsave(filename = "../../analysis/figures//dist_point_E492.png", plot = distance_E492, width = 6, height = 6)
+ggsave(filename = "../../analysis/figures/dist_point_H47_example.png", plot = distance_E492, width = 6, height = 5)
 
 ```
 

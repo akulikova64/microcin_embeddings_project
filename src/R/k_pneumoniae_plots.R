@@ -28,21 +28,27 @@ PDI <- read.csv(file = "../../distance_csvs/kpneumoniae_cluster/distances_PDI_tr
 S <- read.csv(file = "../../distance_csvs/kpneumoniae_cluster/distances_S_tr_vs_kpneumoniae_cluster.csv", header=TRUE, sep=",")
 V <- read.csv(file = "../../distance_csvs/kpneumoniae_cluster/distances_V_sp_vs_kpneumoniae_cluster.csv", header=TRUE, sep=",")
 
+#=================================================================================================================
+# making a heat map of embedding distances between the microcins: (from supplements)
+#=================================================================================================================
 
-# making a heat map between the microcins:
+
 microcin_dist2 <- microcin_dist %>%
   mutate(microcin1 = str_sub(microcin1, 0, -4)) %>%
   mutate(microcin2 = str_sub(microcin2, 0, -4)) %>%
   mutate(distance_label = format(round(distance, 2), nsmall = 2))
 
+
 microcin_dist_plot <- microcin_dist2 %>%
-  ggplot(aes(x = microcin1, y = microcin2, fill = distance)) +
+  ggplot(aes(x = fct_relevel(microcin1, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI"), 
+             y = fct_rev(fct_relevel(microcin2, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")), 
+             fill = distance)) +
   scale_fill_gradient(low = "white", #old low: #e0dede
                       high = "#1b1c3b") + #old high: #31336b
   geom_tile() +
   labs(x = "",
        y = "") +
-  ggtitle("Distances between known microcins") +
+  #ggtitle("Distances between known microcins") +
   geom_text(aes(
     label = distance_label),
     color = "white") +
@@ -64,6 +70,120 @@ microcin_dist_plot <- microcin_dist2 %>%
 microcin_dist_plot
 
 ggsave(filename = "../../analysis/figures/distance_bw_microcins.png", plot = microcin_dist_plot, width = 6, height = 5)
+
+#=================================================================================================================
+# making a heat map of sequence similarity between the microcins: (from supplements)
+#=================================================================================================================
+percent_sim <- read.csv(file = "../../analysis/10_microcin_perc_sim.csv", header=TRUE, sep=",")
+
+percent_div <- percent_sim %>%
+  mutate(percent_divergence = 100 - percent_sim) %>%
+  mutate(div_label = format(round(percent_divergence, 1), nsmall = 2)) %>%
+  add_row(seq1 = "V", seq2 = "V", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "N", seq2 = "N", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "L", seq2 = "L", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "E492", seq2 = "E492", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "G492", seq2 = "G492", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "I47", seq2 = "I47", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "H47", seq2 = "H47", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "M", seq2 = "M", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "S", seq2 = "S", percent_sim = 100, percent_divergence = 0, div_label = "0") %>%
+  add_row(seq1 = "PDI", seq2 = "PDI", percent_sim = 100, percent_divergence = 0, div_label = "0")
+
+all_combo <- percent_div %>%
+  select(seq1) %>%
+  distinct() %>%
+  mutate(seq2 = seq1)
+ 
+all_combo2 <- expand.grid(seq1 = all_combo$seq1, seq2 = all_combo$seq2)
+
+percent_div2 <- right_join(percent_div, all_combo2) %>%
+  mutate(id_unsorted = paste0(seq1, seq2)) %>%
+  mutate(id = map(strsplit(id_unsorted, NULL), function(x) paste(sort(x), collapse = ''))
+         ) %>%
+  select(-id_unsorted)
+
+new_df1 <- percent_div2 %>%
+  select(-c(seq1, seq2)) %>%
+  na.omit() 
+
+new_df2 <- percent_div2 %>%
+  select(-c(seq1, seq2)) %>%
+  na.omit() %>%
+  filter(div_label != 0)
+
+new_df3 <- rbind(new_df1, new_df2)
+  
+seqs <- percent_div2 %>%
+  select(seq1, seq2)
+
+percent_div3 <- cbind(seqs, new_df3)
+
+get_bins <- function(x) {
+  
+  if (x >= 70 ) {
+    return(">70")
+  }
+  else if (x >= 65 & x < 70) {
+    return("65-70")
+  }
+  else if (x >= 60 & x < 65) {
+    return("60-65")
+  }
+  else if (x >= 55 & x < 60) {
+    return("55-60")
+  }
+  else if (x >= 50 & x < 55) {
+    return("50-55")
+  }
+  else if (x >= 45 & x < 50) {
+    return("45-50")
+  }
+  # else if (x >= 40 & x < 45) {
+  #   return("40-45")
+  # }
+  else if (x < 30 & x > 0) {
+    return("<30")
+  }
+  else if (x == 0) {
+    return("0")
+  }
+}
+
+percent_div4 <- percent_div3 %>%
+  mutate(color_label = map_chr(percent_divergence, get_bins)) %>%
+  select(-c(id, percent_sim))
+
+  
+microcin_seq_div_plot <- percent_div4 %>%
+  ggplot(aes(x = fct_relevel(seq1, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI"), 
+             y = fct_rev(fct_relevel(seq2, "V", "N", "L", "E492", "G492", "I47", "H47", "M", "S", "PDI")), 
+             fill = fct_relevel(color_label, "0", "<30", "45-50", "50-55", "55-60", "60-65", "65-70", ">70"))) +
+  scale_fill_manual(values = c("white", "#b8d4db", "#81abb5", "#598994", "#406770", "#5a848f", "#2d535c", "#10343d")) + #old high: #31336b, #4d7e80, #5a848f
+  geom_tile() +
+  labs(x = "",
+       y = "") +
+  geom_text(aes(
+    label = div_label),
+    color = "white") +
+  scale_x_discrete(
+    expand = c(0,0)
+  ) +
+  scale_y_discrete(
+    expand = c(0,0)
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "none",
+    panel.background = element_rect(fill = "white"),
+    axis.text = element_text(color = "black", size = 12),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_line(color = "grey92", size=0.5)
+  ) 
+
+microcin_seq_div_plot
+
+ggsave(filename = "../../analysis/figures/seq_div_bw_microcins.png", plot = microcin_seq_div_plot, width = 6, height = 5)
 
 
 # lets now make a table of microcin distances.

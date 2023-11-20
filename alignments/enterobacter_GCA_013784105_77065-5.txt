@@ -1,0 +1,440 @@
+2)
+score: -86, microcin: V
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKL--T--MKVLGWGSVQRWY-----WNSLPVMTGIADM
+|. |.|    |..  |  |.   ||..|         | |.  |.||......|..  |..||. |   ||.  ||.|  | |.........|...      |||..|  |  .|..|..|....|     .|..|........
+MR-TLT----LNE--L--DS---VSGGA---------S-GR--DIAMAIGTLSGQF--VAGGIG-A---AAG--GVAG--G-AIYDYASTHKPNPA------MSPSGLGGTIKQKPEGIPSEAWNYAAGRLCNWSPNNLSDVCL
+
+
+3)
+score: -87, microcin: L
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGM----LAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|... |...|    .||.|...|...||    |.   |.....|. |.||       |....|..|.|.....||    |..|...|.........|       |...|.......   |....|..|.|.....    
+MREI-TLNEMNNVSGAGDVNWVDVGKTV----AT---NGAGVIGG-AFGA-------GLCGPVCAGAFAVGSSAA----VAALYDAAGNSNSAKQKP-------EGLPPEAWNYAE---GRMCNWSPNNLSDVCL----
+
+
+4)
+score: -84, microcin: N
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|...........|..  ||.|........||..    |..  |.||   | | |. |. |||.. |...|..|.... |.|.| |..     |      |....| |..|   |. |     ||      |... 
+MRELDREELNCVGGA--GDPLADPNSQIVRQIM----SNA--AWGA---A-F-GA-RG-GLGGM-AVGAAGGVTQTV-LQGAA-AHM-----P------VNVPIP-KVPM---GP-S-----WN------GSKG-
+
+
+5)
+score: -89, microcin: PDI
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAAS----V---YGVF-GLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNS---LPVMTGIADM
+| |....   |.   |....|  ||...|    |.....|...|.. |.|      |.. ||. ||.|...|    |   ..|| |..|.|..........|.....|....   |.....|.||..|....|   ..|. |....
+M-ANIRE---LT---LDEITL--VSGGNA----NSNFEGGPRNDRS-SGA------RNS-LGR-NAPTHIYSDPSTVKCANAVFSGMIGGAIKGGPIGMARGTIGGAVVGQC---LSDHGSGNGSGNRGSSSSCSGNNVG-GTCNR
+
+
+6)
+score: -90, microcin: S
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDA-LN-----TVSR-EAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.............|..|.| .|     ..|| ..||..|...|...|..|..........||..|| |   |..... |....|..|.|.....   |.|.          |.........||......|   |. |....
+MSNIRELSFDEIALVSGGNANSNYEGGGSRSRNTGARNSLGRNAPTHIYSDPSTVKCANAVFSGMVG-G---AIKGGP-VGMTRGTIGGAVIGQC---LSGG----------GNGNGGGNRAGSSNCSGSN---VG-GTCSR
+
+
+7)
+score: -80, microcin: E492
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLA-GAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.........|| ||... |. ||       |.||......  |.||...|.  |     |||.  |...||   |....|....   |....|      |....|........|.||.   | ||.....|... 
+MREISQKDLNLAFGAGET-DP-NT-------QLLNDLGNNM--AWGAALGAP--G-----GLGS--AALGAA---GGALQTVGQG---LIDHGP------VNVPIPVLIGPSWNGSGSG---Y-NSATSSSGSGS-
+
+
+8)
+score: -86, microcin: H47
+seq_1: best_hit 
+seq_2: microcin
+
+M--IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|  | |........||   |.|..| |..||...    |..|.|| |..      |....|..|       |.|.    |||.   |.       |         |    |  | |.||.      |.....|.   
+MREI-TESQLRYISGA---GGAPAT-SANAAGAA----AIVGALA-GIP------GGPLGVVVG-------AVSA----GLTT---AI-------G---------S----T--V-GSGSA------SSSAGGGS---
+
+
+9)
+score: -92, microcin: I47
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPAS-EGILADGAMSVAEFMGFSRDVGLGIFNA-TTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|......  ||.. |..|..||.         |  ||| ..|...|..     ||...|.. |...| .|.....|.  |..|           |.  |.    ||..  |       |..    ||     |.   
+MREISDN--MLDS-VKGGMNLNG---------L--PASTNVIDLRGKD-----MGTYIDAN-GACWAPDTPSIIMYP--GGSG-----------PS--YS----MSSS--T-------SSA----NS-----GS---
+
+
+10)
+score: -93, microcin: M
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADG-AMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKV-ETMSP-GKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|..            |..   |    |.. |.     |.|...|| |...|.  | |    |    |.|.. |. | ||..  |.|..............| ..||| |.......|.|   |... |.....|... 
+MRK------------LSE---N----EIK-QI-----SGGDGNDGQAELIAI--G-S----L----AGTFI-SP-G-FGSI--AGAYIGDKVHSWATTATVSPSMSPSGIGLSSQFGSG---RGTS-SASSSAGSGS-
+
+
+11)
+score: -80, microcin: G492
+seq_1: best_hit 
+seq_2: microcin
+
+MIA-TMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.| |........||.. |||.  |....|.......|  |..| ||.     ||..  ||.       ||..|..|.|....|.|.|   |.....|....  ||           |      ||...  |.   
+MRALTENDFFAVSGADR-GDAA--VAGAVAGGTAGAAA--GGWA-GAQ-----MGAT--VGS-------LAGPVGTVVGFVAGAAAGR---YGGAFIYDSFS--SP-----------S------NSSSS--GS---
+
+
+12)
+score: -91, microcin: HUW04
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.........|......||.     |.  |..|..   |  |.|.|.........    || |.....|.|         |. |||...|...|......|..  |....   |.|.  |...|           
+MKELSIEQISLVTGGERGDG-----RD--RHSLLH---E--LKDIAQYLITRNPL----GL-ITHSEPLNA---------GE-EAWLKEREREGARHGYNERQ--GGYHR---GDGG--RHIEN-----------
+
+
+13)
+score: -82, microcin: Splendid
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVS--REAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|..       |. |..|    |.||  ||| |...|   |.|.....|....|.... ||......|...||.      ||.|.     |.   ||...|.....  |.....|.||.   |.            |.
+MRS-------LN-ASEV----NMVSGGREA-RGAYN---SNGPDRTRAQAMRENNPG-RDWSNSDLNNVSLAL------GLAGT-----LV---PGIWGRGISAL--GAAGAAVSGWK---RK------------DK
+
+
+14)
+score: -83, microcin: Vthal
+seq_1: best_hit 
+seq_2: microcin
+
+M-IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+| ........|..|.   ||. |  |...       |||....|..|.|.      ||..|..|  ||.  | |  |.|..|            |  |     |  |.|...|.|.  |....  |.. |.|....
+MYNLSADEISMVDGG---GDG-N--SSGY-------PASPSAVAQQANSP------SRACGQAI--ATG--A-V--VNGMAG------------G--Y-----M--GGLKGAVAGA--VAGGF--SAA-MSGTCNI
+
+
+15)
+score: -96, microcin: FF371
+seq_1: best_hit 
+seq_2: microcin
+
+M-------IATMTPAGMLAGAVLVG---DALNTVS-REAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|       |......|...|....|   ......| ........|.||||......|.|.......... |..|..|.  |.|  |. ||.|   |. |.. |.|           | |... || ||.     |.          
+MRELNNNEILIVDGGGERGGGDHSGEWSSWSGSYSNNSNSSNNSNYPASEQAVQQQANSPTQDCAQAVA-GNAIGGAI--AGS--GG-GLAG---AG-LGA-LGG-----------G-LAGA-LG-GSC-----NQ----------
+
+
+16)
+score: -86, microcin: RFB05
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGM---LAGAVLVGDALN----TVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|. |.|...|   ..|....| |.|    ...||.||.. |.|..|...||.           |..||    |  |.| |..|   |            ||...| |.    |.|     |.|......|...    |... 
+MK-TLTLDEMKIVSGGRHAEG-AYNANGPDRTREQARHE-NYPGREWSSADL-----------RNAGL----A--LSA-VGAV---T------------PGVPGR-VI----GAL-----GAGAALIGGWERN----GGNH-
+
+
+17)
+score: -89, microcin: ER14
+seq_1: best_hit 
+seq_2: microcin
+
+M-IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+| ..........|||.......|......  |.. |.|..|. |.||....|  |    |.||   |....  |..|..  |.| |..     |      |....|...    ||..      ||      |....
+MRELNSEEIRNVAGAGTDNPYDNPILLMN--QIA-ENAAWGA-ALGAYGGPE--G----VILG---AGGGV--VQTVVQ--GAA-AQM-----P------VNVPIPQVP----LGPT------WN------GSGSN
+
+
+18)
+score: -84, microcin: ER18
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGML-AGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGL-TGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.........| .||   | | ||.. |......|  |...  |.|..|.....||....|....|.........|..|| .|.|....... |.|... |.|    |....   |.||..    |......|....
+MRMLINNDIKLVTGA---G-A-NTAT-EYVGHMKN--ADKY--AGGSGSGNKGGGFYTSQGVVDCNNGIIGGVIMGAYGLGWGMALGVVGGA-LAGGCF-KTE----GGNGA---GGGSGS----NGSNCNDGGCSW
+
+
+19)
+score: -82, microcin: ER31
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAE-A-WRLFRYLPGDYYRKVETMS--PGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|....|......  |..|.| |  |........|. |..|... ||...|.. |..|....|.  |...|..|.|. | ||.|| | ........|.|.......|  .|..... ||..|..    ||..   |....
+MLRELTDSEINI--VSGGNA-N--SGYEGPNCTNA-AIKGGVT-GATGGAVA-GAIRGGVTGL--AGGPAGVVAGA-G-TGAAEGAVYGGVSGAVGGYVGCQNSGSANNGGNNGN-LGGDSNA----NSAN---GQCHW
+
+
+20)
+score: -86, microcin: ER58
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGA-MSVAEFMGFSRDVG-LGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|....|.   |...|. | |.|.     |........| |..  || .|.|...|.....| ||   |  ||....|  ||.|...|..... |......  |..|......   |..|  |.. |.....|.    
+MENINTV---LMEKVS-G-AGNY-----ADKHEIGNSS-GRG--GAPDSCANRAGLGAIIGTLG---A--LATGATG--GLAGVVVAGVTGG-LSSVIGC--ENPSYNDNNS---GNSS--RSG-NYGAQCTW----
+
+
+21)
+score: -84, microcin: EN16
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.    |   |....|.    | ||. |.....|....   ||.|||.|..|.|..   || |.  |.|||.        | |.|                |.|.........|.||                  
+MR----P---LTENELK----N-VSG-ALYESVNTNCV---LASGAMIVSAFGGPI---GL-IS--TGLAAI--------G-ACA----------------TSSSSSSASASAGNGS------------------
+
+
+22)
+score: -90, microcin: EN34
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|..       |....|.    | ||.  |....    |.|. |.|.|    |.|.|.    |. |.     | |.....|.|...........|.....|...|.|..  |..| ||...........  |..  
+MRE-------LNESELS----N-VSG--AGMWG----SIGS-AIGGM----FGGGSA----GC-NG-----S-YSHTSTTNKDGSHSESTSFSGGCSVNVGGKSGGSS--KGNG-GSKSGGGRQGNDH--GRH--
+
+
+23)
+score: -84, microcin: EN42
+seq_1: best_hit 
+seq_2: microcin
+
+MIA-TMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.| |........||.. ||...|.   |........|..|. | ||...||. | |.....|.|        | | | |.| | |...|    |..|......||           |      |      |.   
+MRALTDNEVFSVYGADR-GDSAVTG---AVAGGTAGGAAGGW-A-GAELGAEL-G-SLAGPIGTF--------V-G-F-LGG-A-AIGAF----GGAYIYDSFSSP-----------S------N------GS---
+
+
+24)
+score: -89, microcin: EN43
+seq_1: best_hit 
+seq_2: microcin
+
+M-IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNAT-TLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+| ..........||....|.........||..|.   |..|....|.. ||   |...|...   |.| ..|.|..|. |.|.|.....|    |.......|    |.  |..  | |.     |.|.....    
+MRELNEHEIKCAAGGQDYGREIAQGAGAAAGTFV---AGGGGAIVGPI-VA---GMVYDWAS---NKTPDSALSPSGL-GSTLKKKPEGL----PSEAWNYAE----GR--MCN--W-SP-----NNLNDVCK----
+
+
+25)
+score: -90, microcin: EN44
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPG-KLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|..       |....|  |.   |..  |...|..|.|. ||              |.|..   ||...||..... ||.|.|.         |.......|...| ...|.|.    |........|...|... 
+MRE-------LDNKEL--DF---VGG--AGDPLADPNSQ-IL--------------RQVMA---NAAWGAAFGIRG-GLPGMAV---------GMAGGVAQTVIQGAAAQMPVN----VPIPQVPMGPTWNGSKG-
+
+
+26)
+score: -78, microcin: EN49
+seq_1: best_hit 
+seq_2: microcin
+
+M-IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+| ..|........||   ||... |.|..|.      |..| ||.|.  ||   |.   ||     |   ||.  ||.|  |   |...|.........    |||..|... || |.....   |..|..|.   
+MRNLTLNELKSISGA---GDGDG-VGRDIAT------ALGG-LAGGF--VA---GA---VG-----A---AAG--GVAG--G---AVYDFASTHTVNPA----MSPSGLGGY-LG-GYYGSS---SSAVNSGS---
+
+
+27)
+score: -79, microcin: EN51
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLA-GAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.........|| ||   ||| |  |........|  |     |.||...|...|     |.|   |...|  |.||....|..    |....|......|  |. |.......|| |.......|...  |.|. 
+MRELSQQDLVLAFGA---GDA-N--SQLISDMGNN--A-----AWGAGLGAITGG-----GPG---AAIGA--VGGVVQTIGQG----LIDHGPVSVPVPV--MI-GPSWNGSGGW-SGAGFGSSSGGA--GSAS-
+
+
+28)
+score: -82, microcin: EN52
+seq_1: best_hit 
+seq_2: microcin
+
+M--IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|  |.|...|... ||.|..||...... ||..||.. |.....||.|.| |.. |....|.....|.|....|.    |........ |....|.  |.       |.|    |..|.      ||......... 
+MRNITTDELALIH-GAGLDKDASVAIGT-AAGGFLGK-ATKIPSADIAGS-AIG-GYIGGVIADGSNRTITIPSN----GINYNPSIG-LGSFNPN--YN-------GGL----LNSGF------NSSTSSSSSGS-
+
+
+29)
+score: -87, microcin: EN64
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.............|..|....  | |.|........|.|..|......    |....|......|...|  |.|  ||.| | |..|.    |..|.. |..|.|....   |.|........|..........
+MSNIRELSFDEIASVSGGEGHG--S-EVAQDRRDARNSLGRNAPNKIYG----GTEKCVNNILIGAGGGA--VTG--GLPG-A-AVGLV----GGAYAG-ECLSGGGNGN---GNGCNAGSNNCSSGNAASTCNR
+
+
+30)
+score: -86, microcin: EN76
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGM----LAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|... |...|    .||.|...|...||    |.   |.....|. |.||       |....|..|.|.....|| | |.  |.. | |....   |...  |.|...|.......   |....|..|.|.....    
+MREI-TLNEMNNVSGAGDVNWVDVGKTV----AT---NGAGVVGG-AFGA-------GLCGPVCAGVFAVGSSAA-V-GA--LYD-A-AGNSK---PTKQ--KPEGLPPEAWNYAE---GRMCNWSPNNLNDVCL----
+
+
+31)
+score: -89, microcin: EN77
+seq_1: best_hit 
+seq_2: microcin
+
+M-IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNAT-TLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+| ..........||....|.........||..|.   |..|....|.. ||   |...|...   |.| ..|.|..|. |.|.|.....|    |.......|    |.  |..  | |.     |.|.....    
+MRELNEHEIKCAAGGQDYGREIAQGAGAAAGTFV---AGGGGAIVGPI-VA---GMVYDWAS---NKTPDSALSPSGL-GSTLKQKPEGL----PSEAWNYTE----GR--MCN--W-SP-----NNLNDVCK----
+
+
+32)
+score: -88, microcin: EN82
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|..........   |..|.| |... |..|   |...|.|............ ||..  |||...  |....  |..|  | |.|..|.. |.|...........|.......|.|.......|......|....
+MRELSISEINF---VSGGNA-NSNY-ENGR---NTSSSRGSNYNNQGRNNNS-GFYG--GLGQDV--TNCNN--GIIG--G-AIAGSLGG-LAGVAVGITGGAFAGGCFSHGNGNGGGSGANSNCSSSGIGGTCK
+
+
+33)
+score: -87, microcin: EN101
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|...........|..  ||.|........||         |.| ||...|.| |. |. ||... |...   |.||.. |....|....   |      |....|     ||.. |..    ||      |... 
+MRELDSKELNIVGGA--GDPLTDPNSQIMRQ---------IMA-GAAWGATF-GV-RG-GLPGM-AVGM---VGGVTQ-TVVQGAAAQM---P------VNVPIP-----KVPM-GPT----WN------GSKG-
+
+
+34)
+score: -88, microcin: EN112
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.....    |.   |...|.  ||...|    |... ||....|..|...  |.|...|..|.........  |.||  |.. |..|.... |.....|..|..|..|...............|.... |....
+MLSIRE----LN---LEEIAM--VSGGNA----NSNY-EGGSSRGGSSNRS--GSSHSSGKDIYSGVDSCGA--GIFG--GLV-AGSLGGPA-GMALGIVGGMIGGQCTKDSFSSKGGNGNKDKSNDFA-GQCHW
+
+
+35)
+score: -86, microcin: EN123
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|..            ||.|               |..|  | | ||    |.. |.   |||.  |   |.|| ||.|..|........  ||....  |.....|.|.....|........|.|.   |...  
+MRE------------LVHD---------------EIKS--I-A-GA----ECT-FN---GLGQ--A---AVSV-GVAGAIGGTIVGNAT--LPVIGT--VPGWVAGGLMGTIGGTAGYGATCWWSD---TSTN--
+
+
+36)
+score: -87, microcin: EN124
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.............|..|.......|....   |   | |....|........|.... |.||...  |.|...|  |..|.| |........|... |....|  |...|    ||.|.    |... ||....
+MSSIRELSFFEVAQVSGGGNAGDHDRSSSS---N---S-GSKNSGSKNSNIYNGVDSC-GAGIIGG--LVAGSPG--GPLGMA-AGVIGGAIAGQCT-KDSFSS--KADCK----GSNQK----SSDF-TGQCRW
+
+
+37)
+score: -80, microcin: EN126
+seq_1: best_hit 
+seq_2: microcin
+
+M--IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|  |.. |...|..||   |        |.....|   |  |..|.||  ||..||.....|||   |...|..     |.|. |.|.    |..|         |   |.....|..|       |.....| |..
+MRPISD-TELSMISGA---G--------EFSYGEL---A--GVVAGGA--VAGAMGGAVIGGLG---AGPGAIA-----GATT-AGAA----YVAG---------S---LVQSFFGNNS-------SATSSSG-AGS
+
+
+38)
+score: -85, microcin: EN134
+seq_1: best_hit 
+seq_2: microcin
+
+M-IATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVG-LGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+| ..|.......|||   |.|..||..  |........|.|  |.||...|   |..  || .|......|     |  || |.|.         |..     |.|.|.      |.||                  
+MRELTQDQIENVAGA---GGAPATVAN--ATGVGIIIGSLG--AIGAGIAA---GTP--VGPAGMIIGGIL-----G--GL-GVAV---------GSA-----TGSSGA------GGGS------------------
+
+
+39)
+score: -85, microcin: EN138
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDA-LNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDV---GLGIFNATTLAASVYG----VFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|........   |.|..|.| .|..|........|.. |... |....|.....|...||   ..||..... |.|..|    |.||.|.|.|...|.           |.|.|.......|.|.....  ||...  |....
+MRELSLEEI---GYVSGGNANSNYDSGRNTCSETNNN-SNQS-AGRSSSGGYYSGLGQDVTNCNNGIIGGMI-AGSMGGFGGMVAGLVGGAVAGGCFS-----------TSSSGGRNNNGGGTGNNSNC--NSGGF--GGVCR
+
+
+40)
+score: -89, microcin: EN143
+seq_1: best_hit 
+seq_2: microcin
+
+M--IATMTPAGM-L-AGAVLVG---DA--LNT--VSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFG-LTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|  ....|.|.| | .|....|   ||  ..|  .....||..|...|...|..|..........||..|| |        |...||.| ..|......|...|.|.....      |... |.   ||......|   |. |....
+MSKVRELTIAEMNLVSGGGHFGDIHDAQGVGTGNKNNGGARNSLGRNAPTHIYSDPNTVNCANSVFSGMVG-G--------AIKGGVVGMARGTIGGGVLGQCLSGGGNGN------GGGN-KA---GSSNCSGSN---VG-GTCSR
+
+
+41)
+score: -87, microcin: EN153
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDA-LNTVS-REA--ARQFLNEPASEGILADGAMSVAEFMG-FSRDVGLGIFNATTLA-ASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|....... |....|..|.| .|..| |.|  .....|...|..    |..|.  |.| ...||..........| |...|  |..|.|....... |.|.........|.|..|    |..|..    ||.. |.|... 
+MSIRELSL-MEISCVSGGNANSNYESGRNAGSSSSRNNNKNSSS----GNRSG--FYGSLGQDVTNCNNGIIGGAIAGMMG--GPAGMALGIMGGG-LAGGCFSNGGNNSNGGGT----GTNSNC----NSGG-MGGVCR-
+
+
+42)
+score: -86, microcin: EN359
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.|                 |..|  |     |    |....|||..|....   |..||.....|. |...|....|. |...|.......|      |....| |..|.....||.......|....|.....
+MRA-----------------LTEV--E-----L----SFIYGADGNDSYNPI---SLIVGSLSTIAK-LPTPVSLAVGI-GTEIAIQASPHMP------VHVPVP-KIPMGPTWNGSGGGRPSPSASLSTPDSSN
+
+
+43)
+score: -86, microcin: EN421
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|. |.|... |.. |..| |.......|...........||.|. |..||.  |...|.........  |.|..|..| |.|..        |............|.|.|. |..      |... ||.|     
+MR-TLTLNE-LDS-VSGG-ASGRDIAMAIGTLSGQFVAGGIGAA-AGGVAG--GAIYDYASTHKPNP--AMSPSGLGG-TIKQK--------PEGIPSEAWNYAAGRLCMD-LPL------YFQT-PVIT-----
+
+
+44)
+score: -86, microcin: EN511
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.........|.|..  ||.|........||..       |.|...|.....|||.......|. |||..     |  |.| |........|..   | |. |.|   |             ||      |..  
+MRKLNSKEMKLMGGA--GDPLTDQNSQLIRQIM-------IGAGWGMMWGVPMGFPGMAAGAIT-ATTQT-----V--LQG-AMSRMPVNVLIP---R-VP-MGP---T-------------WN------GSK--
+
+
+45)
+score: -81, microcin: BK12
+seq_1: best_hit 
+seq_2: microcin
+
+MIATMTPAGMLAGAVLVGDALNTVSREAARQFLNEPASEGILADGAMSVAEFMGFSRDVGLGIFNATTLAASVYGVFGLTGKAEAWRLFRYLPGDYYRKVETMSPGKLTMKVLGWGSVQRWYWNSLPVMTGIADM
+|.....  |....||  |     |.||     |.|   |. |    |.||   |... ||..|...  |..||.|..|....|.|........|.... |   |.|.      | |.|...   |     |....
+MNYVDS--GFACEAV--G-----VCRE-----LTE---EE-L----MIVA---GGGN-VGGAILGG--LKGSVVGGIGGALGAAAVGAPVGAGGISGM-V---SGGI------G-GAVAGF---S-----GGGGG
+
+

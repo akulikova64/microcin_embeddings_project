@@ -249,7 +249,7 @@ distance_E492 <- ordered_E492 %>%
 
 distance_E492
 
-ggsave(filename = "../../analysis/figures/ecoli_nissle/dist_point_E492.png", plot = distance_E492, width = 6, height = 6)
+#ggsave(filename = "../../analysis/figures/ecoli_nissle/dist_point_E492.png", plot = distance_E492, width = 6, height = 6)
 
 
 #------repeating for G492

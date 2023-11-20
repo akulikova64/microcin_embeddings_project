@@ -150,7 +150,7 @@ variance <- pca_fit %>%
   theme_classic()
 variance
 
-ggsave(filename = "../../analysis/figures/k_pneumoniae/variance.png", plot = variance, width = 8, height = 6)
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/variance.png", plot = variance, width = 8, height = 6)
 ```
 
 ### Rotation Matrix
@@ -229,7 +229,7 @@ girafe(
 
 point_plot1
 
-ggsave(filename = "../../analysis/figures/k_pneumoniae/PCA_45_microcins.png", plot = point_plot1, width = 5, height = 4)
+#ggsave(filename = "../../analysis/figures/k_pneumoniae/PCA_45_microcins.png", plot = point_plot1, width = 5, height = 4)
 ```
 
 # Ecoli Nissle PCA
@@ -251,9 +251,10 @@ microcins <- embeddings_filtered %>%
 orfs <- embeddings_filtered %>%
   filter(group == "orf")
 
-orf_sample = sample_n(orfs, 300)
+#orf_sample = sample_n(orfs, 300)
 
-pca_data = rbind(microcins, orf_sample)
+#pca_data = rbind(microcins, orf_sample)
+pca_data = rbind(microcins, orfs)
 ```
 
 ```{r}
@@ -264,32 +265,93 @@ pca_fit <- pca_data %>%
 ```
 
 ```{r}
-library(ggiraph)
+#library(ggiraph)
+library(tidyverse)
+library(cowplot)
+options(scipen = 999)
+library(colorspace)
+library(broom)  # for augment(), tidy()
+```
 
+```{r}
 
-point_plot1 <- pca_fit %>%
+for_point_plot1 <- pca_fit %>%
   # add PCs to the original dataset
-  augment(pca_data) %>%
-  ggplot(aes(.fittedPC1, .fittedPC2)) +
-  #geom_point(aes(color = group),
-   #          size = 1) +
-  geom_point_interactive(
-    aes(tooltip = name,
-        color = group),
-    size = 1
-    ) +
-  labs(x = "PC1", y = "PC2") +
-  theme_bw() +
-  scale_color_brewer(palette = "Set1")
+  augment(pca_data)
 
-girafe(
-  ggobj = point_plot1,
-  width_svg = 6,
-  height_svg = 6*0.618
-)
+orf_data <- for_point_plot1 %>%
+  filter(group == "orf")
+
+microcin_data <- for_point_plot1 %>%
+  filter(group == "microcin")
+  
+```
+
+```{r}
+
+colors <- c("orf" = "#a7b8c4", "microcin" = "#ffb22e") 
+sizes <- c("orf" = 1, "microcin" = 3.5)
+
+point_plot1 <- for_point_plot1 %>%
+  ggplot() +
+  geom_point(data = orf_data, 
+             aes(.fittedPC1, .fittedPC2, size = "orf"),
+             #shape = 21,
+             #color = '#bad0de', #758896, #87b3d4, #598db5
+             #color = "#BCCAE1", #blue
+             color = "#CAD8EF",
+             #color = "#00204D",
+             #fill = "#a7b8c4",
+             #size = 1,
+             stroke = 0.2) +
+  stat_density_2d(geom = "polygon", 
+                  contour = TRUE,
+                  data = orf_data,
+                  aes(.fittedPC1, .fittedPC2, fill = factor(after_stat(level))), 
+                  #colour = "#8aa4ba",
+                  bins = 10,
+                  #alpha = 0.8,
+                  key_glyph = "blank") +
+  # stat_density_2d_filled(data = orf_data,
+  #            aes(.fittedPC1, .fittedPC2),
+  #            #fill = "#758896",
+  #            #color = "#515e69",
+  #            alpha = 0.5,
+  #            bins = 5) +
+  # geom_density_2d(data = orf_data,
+  #            aes(.fittedPC1, .fittedPC2),
+  #            #fill = "#758896",
+  #            color = "#515e69",
+  #            bins = 5) +
+  #scale_fill_distiller(palette = "Blues", direction = 1, guide = "none") +
+  #scale_fill_viridis_c(begin = 0.1, guide = "none", option = "E") +
+  geom_point(data = microcin_data, 
+             aes(.fittedPC1, .fittedPC2, size = "microcin"),
+             shape = 21,
+             color = "#70685d", #fc8f00
+             fill = "#ffb22e",
+             stroke = 0.25) +
+  scale_fill_manual(values = c('#BACAE7', '#ACBCD8', '#A2B1CD', '#93A1BC', '#8494AF', '#7787A1', '#6A7B95', '#60708A', '#52647F', '#3C597E'), guide = "none") +
+  # scale_fill_manual(values = c('#A6BDE2', '#98AFD4', '#8DA4C9', '#7D95B9', '#6F88AC', '#627BA0', '#546E93', '#4A6589', '#3C597E', '#2D4D73'), guide = "none") +
+  #scale_fill_manual(values = c('#A8C2D3', '#9AB4C5', '#8DA7B8', '#7F9AAA', '#728D9D', '#658091', '#577384', '#4A6778', '#3D5B6C', '#2C4D5E'), guide = "none") +
+  scale_size_manual(values = sizes) +
+  guides(size = guide_legend(override.aes = list(fill = c("#CAD8EF", "#ffb22e"), color = c("#8aa4ba", "#70685d")))) + #b7cced
+  scale_y_continuous(
+    name = "PC2"
+    #expand = expansion(add = c(0,0))
+  ) +
+  scale_x_continuous(
+    name = "PC1"
+    #expand = expansion(add = c(0,0))
+  ) +
+  labs(size = "") +
+  theme_cowplot(16) +
+  theme(legend.position = c(0.8, 0.2))
+    
+
 
 point_plot1
-#ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2.png", plot = point_plot1, width = 8, height = 6)
+#ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2_attempt3.png", plot = point_plot1, width = 7, height = 4.5)
 ```
 
 ```{r}
@@ -333,6 +395,7 @@ orfs <- embeddings2 %>%
 orf_sample = sample_n(orfs, 300)
 
 pca_data = rbind(microcins, orf_sample)
+#pca_data = rbind(microcins, orfs)
 ```
 
 ```{r}
@@ -349,32 +412,156 @@ library(ggiraph)
 point_plot1 <- pca_fit %>%
   # add PCs to the original dataset
   augment(pca_data) %>%
-  ggplot(aes(.fittedPC1, .fittedPC2)) +
+  ggplot(aes(.fittedPC1, .fittedPC2, color = group)) +
+  geom_point() +
   #geom_point(aes(color = group),
    #          size = 1) +
-  geom_point_interactive(
-    aes(tooltip = name,
-        color = group),
-    size = 1
-    ) +
+  # geom_point_interactive(
+  #   aes(tooltip = name,
+  #       color = group),
+  #   size = 1
+  #   ) +
   labs(x = "PC1", y = "PC2") +
   theme_bw() +
   scale_color_brewer(palette = "Set1")
 
-girafe(
-  ggobj = point_plot1,
-  width_svg = 6,
-  height_svg = 6*0.618
-)
+# girafe(
+#   ggobj = point_plot1,
+#   width_svg = 6,
+#   height_svg = 6*0.618
+# )
 
 point_plot1
-ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2_45_microcins.png", plot = point_plot1, width = 8, height = 6)
+#ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2_45_microcins.png", plot = point_plot1, width = 8, height = 6)
 ```
 
 
+# E. coli L (microcin) (From paper)
 
 
+```{r}
+# loading data:
+#annotation <- read.csv(file = "../../genome_annotation_csvs/ecoli_L_annotation.csv", header=TRUE, sep=",")
+embeddings <- read.csv(file = "../../for_PCA/ecoli_L_PCA_data.csv", header=TRUE, sep=",")
+
+embeddings_filtered <- embeddings %>%
+  filter(name != 89442)
+
+```
+
+```{r}
+rm(embeddings)
+```
+
+```{r}
+microcins <- embeddings_filtered %>%
+  filter(group == "microcin")
+
+orfs <- embeddings_filtered %>%
+  filter(group == "orf")
+
+#orf_sample = sample_n(orfs, 300)
+
+#pca_data = rbind(microcins, orf_sample)
+pca_data = rbind(microcins, orfs)
+```
+
+```{r}
+pca_fit <- pca_data %>% 
+  select(where(is.numeric)) %>% # retain only numeric columns
+  scale() %>%                   # scale to zero mean and unit variance
+  prcomp()  
+```
+
+```{r}
+#library(ggiraph)
+library(tidyverse)
+library(cowplot)
+options(scipen = 999)
+library(colorspace)
+library(broom)  # for augment(), tidy()
+```
+
+```{r}
+
+for_point_plot1 <- pca_fit %>%
+  # add PCs to the original dataset
+  augment(pca_data)
+
+orf_data <- for_point_plot1 %>%
+  filter(group == "orf")
+
+microcin_data <- for_point_plot1 %>%
+  filter(group == "microcin")
+  
+```
+#------------------------------------------------------------
+#PCA FIGURE FROM PAPER IS THIS ONE:
+#-------------------------------------------------------------
+
+```{r}
+
+colors <- c("orf" = "#a7b8c4", "microcin" = "#ffb22e") 
+sizes <- c("orf" = 1, "microcin" = 3.5)
+
+point_plot1 <- for_point_plot1 %>%
+  ggplot() +
+  geom_point(data = orf_data, 
+             aes(.fittedPC1, .fittedPC2, size = "orf"),
+             #shape = 21,
+             #color = '#bad0de', #758896, #87b3d4, #598db5
+             #color = "#BCCAE1", #blue
+             color = "#CAD8EF",
+             #color = "#00204D",
+             #fill = "#a7b8c4",
+             #size = 1,
+             stroke = 0.2) +
+  stat_density_2d(geom = "polygon", 
+                  contour = TRUE,
+                  data = orf_data,
+                  aes(.fittedPC1, .fittedPC2, fill = factor(after_stat(level))), 
+                  #colour = "#8aa4ba",
+                  bins = 10,
+                  #alpha = 0.8,
+                  key_glyph = "blank") +
+  # stat_density_2d_filled(data = orf_data,
+  #            aes(.fittedPC1, .fittedPC2),
+  #            #fill = "#758896",
+  #            #color = "#515e69",
+  #            alpha = 0.5,
+  #            bins = 5) +
+  # geom_density_2d(data = orf_data,
+  #            aes(.fittedPC1, .fittedPC2),
+  #            #fill = "#758896",
+  #            color = "#515e69",
+  #            bins = 5) +
+  #scale_fill_distiller(palette = "Blues", direction = 1, guide = "none") +
+  #scale_fill_viridis_c(begin = 0.1, guide = "none", option = "E") +
+  geom_point(data = microcin_data, 
+             aes(.fittedPC1, .fittedPC2, size = "microcin"),
+             shape = 21,
+             color = "#70685d", #fc8f00
+             fill = "#ffb22e",
+             stroke = 0.25) +
+  scale_fill_manual(values = c('#BACAE7', '#ACBCD8', '#A2B1CD', '#93A1BC', '#8494AF', '#7787A1', '#6A7B95', '#60708A', '#52647F', '#3C597E'), guide = "none") +
+  # scale_fill_manual(values = c('#A6BDE2', '#98AFD4', '#8DA4C9', '#7D95B9', '#6F88AC', '#627BA0', '#546E93', '#4A6589', '#3C597E', '#2D4D73'), guide = "none") +
+  #scale_fill_manual(values = c('#A8C2D3', '#9AB4C5', '#8DA7B8', '#7F9AAA', '#728D9D', '#658091', '#577384', '#4A6778', '#3D5B6C', '#2C4D5E'), guide = "none") +
+  scale_size_manual(values = sizes) +
+  guides(size = guide_legend(override.aes = list(fill = c("#CAD8EF", "#ffb22e"), color = c("#8aa4ba", "#70685d")))) + #b7cced
+  scale_y_continuous(
+    name = "PC2"
+    #expand = expansion(add = c(0,0))
+  ) +
+  scale_x_continuous(
+    name = "PC1"
+    #expand = expansion(add = c(0,0))
+  ) +
+  labs(size = "") +
+  theme_cowplot(16) +
+  theme(legend.position = c(0.8, 0.2))
+    
 
 
-
-
+point_plot1
+#ggsave(filename = "../../analysis/figures/ecoli_nissle/PCA_1_2_attempt3.png", plot = point_plot1, width = 7, height = 4.5)
+```

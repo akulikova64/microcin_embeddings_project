@@ -1,0 +1,88 @@
+---
+title: "Homework 5"
+---
+
+```{r global_options, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(colorspace)
+library(tidyverse)
+library(broom)
+library(sf)
+opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
+```
+
+**This homework is due on the deadline posted on edX. Please submit a .pdf file of your output and upload a .zip file containing your .Rmd file. Do NOT include your name or EID in your filenames.**
+
+**Problem 1:** Use the color picker app from the **colorspace** package (`colorspace::choose_color()`) to create a qualitative color scale containing five colors. One of the five colors should be `#5C9E76`, so you need to find four additional colors that go with this one.
+
+```{r fig.width = 6, fig.height = 3}
+colors <- c("#5C9E76", "#B5866F", "#90955A", "#7194BA", "#B97EA8")
+swatchplot(colors)
+```
+
+Explanation of colors chosen: There is no one single correct choice. Important criteria to consider are: The colors should all look distinct. The colors should not create the impression of a specific order. For example, multiple different shades of green that differ primarily in how light or dark they are would be a bad choice, as they can be ordered by lightness. The colors should appear like they belong together. For example, they should have similar (but not necessarily identical) chroma, and also somewhat similar lightness.
+
+
+For the rest of this homework, we will be working with the `midwest_clean` dataset, which is a cleaned up version of the **ggplot2** `midwest` dataset.
+
+```{r}
+midwest_clean <- midwest %>% 
+  select(
+    state, county, area, popdensity, percbelowpoverty, inmetro
+  ) %>%        # keep only a subset of data
+  na.omit()    # remove any rows with missing data
+```
+
+
+**Problem 2:** Perform a PCA of the `midwest_clean` dataset and make a rotation plot for PC 1 and PC 2.
+
+```{r}
+# perform PCA
+pca_fit <- midwest_clean %>% 
+  select(where(is.numeric)) %>% # retain only numeric columns
+  scale() %>%                   # scale to zero mean and unit variance
+  prcomp() 
+# make rotation plot
+arrow_style <- arrow(
+  angle = 20, length = grid::unit(8, "pt"),
+  ends = "first", type = "closed"
+)
+pca_fit %>%
+  # extract rotation matrix
+  tidy(matrix = "rotation") %>%
+  pivot_wider(
+    names_from = "PC", values_from = "value",
+    names_prefix = "PC"
+  ) %>%
+  ggplot(aes(PC1, PC2)) +
+  geom_segment(
+    xend = 0, yend = 0,
+    arrow = arrow_style
+  ) +
+  geom_text(aes(label = column), hjust = 0.5, vjust = 2) +
+  coord_fixed(
+    xlim = c(-.75, 1), ylim = c(-.9, .25)
+    )
+```
+
+**Problem 3:** Make a scatter plot of PC 2 versus PC 1 and color by state. You should use the custom colorscale you created in Problem 1. Then use the rotation plot from Problem 2 to describe where Chicago, Illinois can be found on the scatter plot. Provide any additional evidence used to support your answer.
+
+```{r}
+pca_fit %>%
+  # add PCs to the original dataset
+  augment(midwest_clean) %>%
+  ggplot(aes(.fittedPC1, .fittedPC2)) +
+  geom_point(aes(color = state)) +
+  scale_color_manual(values = colors) +
+  theme_bw()
+```
+
+All 5 states include counties that vary along both PC 1 and 2. Chicago is the most densely populated Midwest city and is located within Cook County, Illinois. Based on the rotation plot from Problem 2, we expect counties with high population density to have negative PC 2 values and positive PC 1 values. We can infer that the teal point found at the bottom right of the plot around (6.2, -7.0) represents Chicago, Illinois.
+
+```{r}
+midwest_clean %>% 
+  filter(state == "IL") %>% 
+  arrange(desc(popdensity)) %>% 
+  head()
+```

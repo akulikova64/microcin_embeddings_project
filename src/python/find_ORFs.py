@@ -3,10 +3,23 @@ from Bio.Seq import Seq
 import os
 import sys
 
+genome = sys.argv[1]
+dataset = sys.argv[2]
+
 # Find all potential open reading frames in both strands.
 
-genome_path = "../../genome_files/genomes_10_known_microcins/ecoli_NCTC11128_N.fna"
-output_path = "../../ORF_files/ORFs_ecoli_N/protein_ORFs_ecoli_N.fasta"
+genome_folder = "../../genome_files/" + dataset + "/"
+isExist = os.path.exists(genome_folder)
+if not isExist:
+   os.makedirs(genome_folder)
+genome_path = "../../genome_files/" + dataset + "/" + genome + ".fna"
+
+
+output_folder = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/"
+isExist = os.path.exists(output_folder)
+if not isExist:
+   os.makedirs(output_folder)
+output_path = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/protein_ORFs_" + genome + ".fasta"
 
 genome = SeqIO.parse(genome_path, "fasta")
 

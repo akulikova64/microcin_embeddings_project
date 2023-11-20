@@ -1,0 +1,54 @@
+
+---------------------------------------------------------------------------------------
+Extra-intestinal, No microcins found by cinful:
+---------------------------------------------------------------------------------------
+>H148_ORF.66606 [27081-27323](+) type:genom length:80 frame:3 start:ATG stop:TAA
+MKKVLYGIFAISALAATSAWAAPVQVGEAAGSAATSVSAGSSSATSVSTVSSAVGVALAATGGGDGSNTGTTTTTTTSTQ
+>H148_ORF.77766-13 [154800-156314](+) type:genom length:705 frame:3 start:ATG stop:TAG
+MVGAHFGSLGAIAGADIGARLASKARLAGGAGAADAADKLIASPAFQSAVKNLHGKAPGHIVDSRIRRSPQWKSFFNSLPEQEKRTIARLGIITWLSNDPDND
+>M663105_ORF.16297-13 [26133-27647](+) type:genom length:705 frame:3 start:ATG stop:TAG
+MVGAHFGSLGAIAGADIGARLASKARLAGGAGAADAADKLIASPAFQSAVKNLHGKAPGHIVDSRIRRSPQWKSFFNSLPEQEKRTIARLGIITWLSNDPDND
+>H219_ORF.33022-13 [154799-156313](-) type:genom length:705 frame:2 start:ATG stop:TAG
+MVGAHFGSLGAIAGADIGARLASKARLAGGAGAADAADKLIASPAFQSAVKNLHGKAPGHIVDSRIRRSPQWKSFFNSLPEQEKRTIARLGIITWLSNDPDND
+>H219_ORF.55022 [27080-27322](-) type:genom length:80 frame:2 start:ATG stop:TAA
+MKKVLYGIFAISALAATSAWAAPVQVGEAAGSAATSVSAGSSSATSVSTVSSAVGVALAATGGGDGSNTGTTTTTTTSTQ
+>H144_ORF.28219-13 [154800-156314](-) type:genom length:705 frame:3 start:ATG stop:TAG
+MVGAHFGSLGAIAGADIGARLASKARLAGGAGAADAADKLIASPAFQSAVKNLHGKAPGHIVDSRIRRSPQWKSFFNSLPEQEKRTIARLGIITWLSNDPDND
+>H022_ORF.65323 [27279-27521](-) type:genom length:80 frame:3 start:ATG stop:TAA
+MKKVLYGIFAISALAATSAWAAPVQVGEAAGSAATSVSAGSSSATSVSTVSSAVGVALAATGGGDGSNTGTTTTTTTSTQ
+
+---------------------------------------------------------------------------------------
+Extra-intestinal, one microcin found by cinful:
+---------------------------------------------------------------------------------------
+All had either the V or M microcin, except BS36:
+(Has a truncated V)
+
+>BS36_ORF.86410 [7279-7674](+) type:genom length:131 frame:1 start:ATG stop:TAA
+MRTLTLNELDSVSGGASGRDIAMAIGTLSGQFVAGGIGAAAGGVAGGAIYDYASTHKPNPAMSPSGLGGTIKQKPEGIPSEAWNYAAGRLCNWSPNKRTVIGQSTQNDISSWWVVYLPFHLQQISEHNEEL
+
+Additional microcin found in H020:
+(H47)
+
+>H020_ORF.75316 [12480-12773](+) type:genom length:97 frame:3 start:ATG stop:TAA
+MGFEGFWSGQAGKTEVKYDGVYMREITESQLRYISGAGGAPATSANAAGAAAIVGALAGIPGGPLGVVVGAVSAGLTTAIGSTVGSGSASSSAGGGS
+
+---------------------------------------------------------------------------------------
+Water, No microcins found by cinful:
+---------------------------------------------------------------------------------------
+
+>E7727_ORF.13556-21 [279171-280752](-) type:genom length:721 frame:1 start:ATG stop:TAA
+MGKGAGRALSRLGGPVMGALQLAPVLMDEQASTHEKAGAIGSTAGAWLGGAVGSLAGPLGTVAGATLGSVAGEYLGGFVTDLYQKWTATDKEPQEQKVNAEASLRVELGEGLRLTSSRVTEDGMGLNIYAGDNYITGW
+>E9644_ORF.41919-21 [36549-38130](+) type:genom length:721 frame:1 start:ATG stop:TAA
+MGKGAGRALSRLGGPVMGALQLAPVLMDEQASTHEKAGAIGSTAGAWLGGAVGSLAGPLGTVAGATLGSVAGEYLGGFVTDLYQKWTATDKEPQEQKVNAEASLRVELGEGLRLTSSRVTEDGMGLNIYAGDNYITGW
+
+---------------------------------------------------------------------------------------
+Water, microcins found by cinful:
+---------------------------------------------------------------------------------------
+
+One only found by embeddings and not cinful: 
+
+H47
+>E2549_ORF.77105 [10412-10705](+) type:genom length:97 frame:2 start:ATG stop:TAA
+MGFEGFWSGQAGKTEVKYDGVYMREITESQLRYISGAGGAPATSANAAGAAAIVGALAGIPGGPLGVVVGAVSAGLTTAIGSTVGSGSASSSAGGGS 
+(HMMER did not find this one)
+

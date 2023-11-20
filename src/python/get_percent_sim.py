@@ -25,8 +25,8 @@ def get_alignment(seq1, seq2):
     return alignment.formatted(seq1, seq2)
 
 #---------------main-------------------------
-input_path = "../../microcin_files/Microcins_Known.fasta"
-output_path = "../../analysis/10_microcin_perc_sim.csv" 
+input_path = "../../ORF_files/ORFs_10_known_microcins/protein_ORFs_ecoli_L_filtered.fasta"
+output_path = "../../analysis/ecoli_L_perc_sim.csv" 
 
 
 with open(output_path, 'w', newline='\n', encoding='utf-8') as csv_file:
@@ -39,9 +39,14 @@ with open(output_path, 'w', newline='\n', encoding='utf-8') as csv_file:
   for i in range(0, num_microcins - 1):
     for j in range(i + 1, num_microcins):
 
-        name1 = microcin_list[i].name.split("|")[0][0:-3]
-        name2 = microcin_list[j].name.split("|")[0][0:-3]
+        #name1 = microcin_list[i].name.split("|")[0][0:-3]
+        name1 = microcin_list[i].name.split(" ")[0]
+        name1 = name1.split(".")[2]
 
+        #name2 = microcin_list[j].name.split("|")[0][0:-3]
+        name2 = microcin_list[j].name.split(" ")[0]
+        name2 = name2.split(".")[2]
+ 
         alignment = get_alignment(str(microcin_list[i].seq), str(microcin_list[j].seq))
         seq1 = alignment.split("\n")[0]
         seq2 = alignment.split("\n")[2]

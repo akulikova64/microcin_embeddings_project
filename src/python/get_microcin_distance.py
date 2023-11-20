@@ -20,9 +20,9 @@ def get_distance(emb_1, emb_2):
     
     return distance
 
-input_path_microcins =  "./Microcins_Known_emb_esm1b/"
-output_path = "./distance_csvs/distance_bw_microcins.csv"
-genome = "ecoli_s88"
+input_path_microcins =  "../../microcin_files/non-microcin_emb/"
+output_path = "../../microcin_files/distance_bw_nonmicrocins.csv"
+genome = "several_genomes"
 
 microcin_list_1 = os.listdir(input_path_microcins)
 microcin_list_2 = os.listdir(input_path_microcins)
@@ -30,16 +30,21 @@ microcin_list_2 = os.listdir(input_path_microcins)
 
 with open(output_path, "w") as CSV_file:
     writer = csv.writer(CSV_file)
-    writer.writerow(['microcin1', 'microcin2', 'distance'])
+    #writer.writerow(['microcin1', 'microcin2', 'distance'])
+    writer.writerow(['seq1', 'seq2', 'distance'])
 
     for microcin1 in microcin_list_1:
-        microcin1_name = microcin1.split("|")[0]
+        #microcin1_name = microcin1.split("|")[0]
+        microcin1_name = microcin1.split(" ")[0]
+        microcin1_name = microcin1_name.split(".")[2]
 
         micr_embedding1 = torch.load(input_path_microcins + microcin1)
         mean_emb_microcin1 = micr_embedding1['mean_representations'][33]
     
         for microcin2 in microcin_list_2:
-            microcin2_name = microcin2.split("|")[0]
+            #microcin2_name = microcin2.split("|")[0]
+            microcin2_name = microcin2.split(" ")[0]
+            microcin2_name = microcin2_name.split(".")[2]
 
             micr_embedding2 = torch.load(input_path_microcins + microcin2)
             mean_emb_microcin2 = micr_embedding2['mean_representations'][33]

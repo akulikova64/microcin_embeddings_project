@@ -29,26 +29,32 @@ annot_genome_list = os.listdir(annotation_csvs)
 for main_folder_path, genome_folders, distance_files in os.walk(distance_csvs):
     for filename in distance_files:
         #print(filename)
-        distance_df = pd.read_csv(main_folder_path + "/" + filename)
-        
-        for genome_file in annot_genome_list:
-            annot_genome = genome_file[0:-15]
-            distance_df_genome = distance_df.loc[0].at['genome']
-            query_name = distance_df.loc[0].at['microcin']
-            query = query_name.split("_")[0]
+        try:
+            distance_df = pd.read_csv(main_folder_path + "/" + filename)
+            
+            for genome_file in annot_genome_list:
+                annot_genome = genome_file[0:-15]
+                distance_df_genome = distance_df.loc[0].at['genome']
+                query_name = distance_df.loc[0].at['microcin']
+                query = query_name.split("_")[0]
 
-            if annot_genome == distance_df_genome:
-                annotation_df = pd.read_csv(annotation_csvs + genome_file)
+                if annot_genome == distance_df_genome:
+                    annotation_df = pd.read_csv(annotation_csvs + genome_file)
 
-                joined_df = pd.merge(left = annotation_df, right = distance_df, left_on = ['orf_number','orf_location', 'orf_strand'], right_on=['orf_number','orf_location', 'orf_strand'])
-                joined_df = joined_df.sort_values(by=['distance'])
-                joined_df.insert(loc = 0, column = 'rank', value = list(range(1, len(joined_df)+1)))
-                joined_df =  joined_df[joined_df['is_microcin'] != 'non-microcin']
-                joined_df = joined_df.rename(columns={"closest_microcin": "found_microcin"})
-                joined_df = joined_df[["genome", "found_microcin", "orf_number", "rank", "distance"]]
-                joined_df['query'] = query
-                joined_df = joined_df[["genome", "query", "found_microcin", "orf_number", "rank", "distance"]]
-                df_list.append(joined_df)
+                    joined_df = pd.merge(left = annotation_df, right = distance_df, left_on = ['orf_number','orf_location', 'orf_strand'], right_on=['orf_number','orf_location', 'orf_strand'])
+                    joined_df = joined_df.sort_values(by=['distance'])
+                    joined_df.insert(loc = 0, column = 'rank', value = list(range(1, len(joined_df)+1)))
+                    joined_df =  joined_df[joined_df['is_microcin'] != 'non-microcin']
+                    joined_df = joined_df.rename(columns={"closest_microcin": "found_microcin"})
+                    joined_df = joined_df[["genome", "found_microcin", "orf_number", "rank", "distance"]]
+                    joined_df['query'] = query
+                    joined_df = joined_df[["genome", "query", "found_microcin", "orf_number", "rank", "distance"]]
+                    df_list.append(joined_df)
+        except:
+            print("Error")
+            print(main_folder_path + "/" + filename)
+            print()
+
 
 
 complete_df = pd.concat(df_list)

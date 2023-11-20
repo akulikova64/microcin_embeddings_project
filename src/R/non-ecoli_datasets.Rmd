@@ -1,0 +1,133 @@
+---
+title: "non-ecoli_datasets"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(cowplot)
+library(colorspace)
+options(scipen = 999)
+```
+
+Loading in enterobacteriales data:
+```{r}
+#accessions_all <- read.csv(file = "../../non-ecoli_datasets/non_ecoli_accessions/Enterobacteriaciae accessions-Table 1.csv", header=TRUE, sep=",") 
+cinful_all <- read.csv(file = "../../non-ecoli_datasets/non_ecoli_accessions/Enterobacteriaciae cinful outpu-Table 1.csv", header=TRUE, sep=",") 
+```
+Cleaning data:
+```{r}
+accessions_all <- accessions_all %>%
+  select(accession, ncbi_organism_name)
+
+cinful_all <- cinful_all %>%
+  select(component, hmmerHit, accession) # qseqid
+
+combined_data <- left_join(accessions_all, cinful_all)
+```
+
+
+filtering for klebsiella and enterobacter only:
+```{r}
+klebsiella <- combined_data %>%
+  filter(grepl('Klebsiella', ncbi_organism_name))
+
+enterobacter <- combined_data %>%
+  filter(grepl('Enterobacter', ncbi_organism_name))
+```
+
+```{r}
+kebsiella_2 <- klebsiella %>%
+  filter(component %in% c("CvaB.verified", "microcins.verified")) %>%
+  pivot_wider(names_from = component, values_from = hmmerHit) %>%
+  filter(grepl('False', microcins.verified)) %>%
+  filter(!grepl('True', microcins.verified)) %>%
+  filter(CvaB.verified != "NULL") %>%
+  distinct(accession, .keep_all=TRUE)
+
+```
+
+
+```{r}
+enterobacter_2 <- enterobacter %>%
+  filter(component %in% c("CvaB.verified", "microcins.verified")) %>%
+  pivot_wider(names_from = component, values_from = hmmerHit) %>%
+  filter(grepl('False', microcins.verified)) %>%
+  filter(!grepl('True', microcins.verified)) %>%
+  filter(CvaB.verified != "NULL") %>%
+  distinct(accession, .keep_all=TRUE)
+
+```
+
+Compile and save enterobacter genomes:
+```{r}
+enterobacter_sample <- enterobacter_2 %>%
+  filter(accession %in% c("GCF_902159655.1", "GCF_902162485.1", "GCF_902162535.1", "GCF_902162555.1"))
+
+enterobacter_random <- enterobacter_2 %>%
+  group_by(ncbi_organism_name) %>%
+  slice_sample(n = 8, replace = TRUE) %>%
+  rbind(enterobacter_sample) %>%
+  distinct(accession, .keep_all=TRUE) %>%
+  rename(CvaB_found = CvaB.verified,
+         microcins_found = microcins.verified)
+
+```
+
+
+```{r}
+enterobacter_random2 <- enterobacter_random %>%
+  mutate(CvaB_found = ifelse(CvaB_found != "True", "True", CvaB_found),
+         microcins_found = ifelse(microcins_found != "False", "False", microcins_found))
+
+enterobacter_random2$CvaB_found <- enterobacter_random2$CvaB_found %>%
+  unlist()
+enterobacter_random2$microcins_found <- enterobacter_random2$microcins_found %>%
+  unlist()
+enterobacter_random2$ncbi_organism_name <- enterobacter_random2$ncbi_organism_name %>%
+  unlist()
+enterobacter_random2$accession <- enterobacter_random2$accession %>%
+  unlist()
+
+write.csv(enterobacter_random2, "../../non-ecoli_datasets/enterobacter_45.csv", sep=",") 
+```
+
+Now klebsiella:
+
+
+```{r}
+klebsiella_sample <- kebsiella_2 %>%
+  filter(accession %in% c("GCF_002918635.1", "GCF_002919605.1", "GCF_010590065.1", "GCF_016643945.1", "GCF_016653015.1", "GCF_018439305.1", "GCF_018439315.1", "GCF_018439335.1", "GCF_018442305.1", "GCF_018442325.1", "GCF_018443125.1", "GCF_902163235.1"))
+
+klebsiella_random <- kebsiella_2 %>%
+  group_by(ncbi_organism_name) %>%
+  slice_sample(n = 5, replace = TRUE) %>%
+  rbind(klebsiella_sample) %>%
+  distinct(accession, .keep_all=TRUE) %>%
+  rename(CvaB_found = CvaB.verified,
+         microcins_found = microcins.verified)
+
+```
+
+
+```{r}
+klebsiella_random2 <- klebsiella_random %>%
+  mutate(CvaB_found = ifelse(CvaB_found != "True", "True", CvaB_found),
+         microcins_found = ifelse(microcins_found != "False", "False", microcins_found))
+
+klebsiella_random2$CvaB_found <- klebsiella_random2$CvaB_found %>%
+  unlist()
+klebsiella_random2$microcins_found <- klebsiella_random2$microcins_found %>%
+  unlist()
+klebsiella_random2$ncbi_organism_name <- klebsiella_random2$ncbi_organism_name %>%
+  unlist()
+klebsiella_random2$accession <- klebsiella_random2$accession %>%
+  unlist()
+
+write.csv(klebsiella_random2, "../../non-ecoli_datasets/klebsiella_47.csv", sep=",") 
+```
+
+
+
+
+

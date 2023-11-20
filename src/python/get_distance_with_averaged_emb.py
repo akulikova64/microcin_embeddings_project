@@ -18,10 +18,23 @@ def get_distance(emb_1, emb_2):
     
     return distance
 
+genome = sys.argv[1]
+dataset = sys.argv[2]
+
+#------------paths-------------------------
 input_path_microcin_avg =  "../../microcin_files/average_emb_10_esm1b/average_10_microcin_emb.pt"
-input_path_orfs = "../../embeddings/genome_embeddings_HUW04/" 
-genome = "vibrio_cholerae_HUW04"
-output_path = "../../distance_csvs/" + genome + "/distances_average_vs_" + genome + ".csv"
+
+input_path_orfs = "../../embeddings/" + dataset + "/genome_embeddings_" + genome + "/" 
+isExist = os.path.exists(input_path_orfs)
+if not isExist:
+   os.makedirs(input_path_orfs)
+
+output_path = "../../distance_csvs/" + dataset + "/" + genome + "/distances_average_vs_" + genome + ".csv"
+output_folder = "../../distance_csvs/" + dataset + "/" + genome + "/"
+isExist = os.path.exists(output_folder)
+if not isExist:
+    os.makedirs(output_folder)
+#-------------------------------------------
 
 
 with open(output_path, "w") as CSV_file:

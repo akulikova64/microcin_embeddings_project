@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 ```{r}
-# K pneumoniae data:
 
 library(tidyverse)
 library(cowplot)
@@ -27,12 +26,13 @@ accenssion_phylo_extraintestinal <- read.csv(file = "../../Touchon_datasets/unfi
 all_data <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Touchon_accenssions_phylogroups/Australian_Dataset.csv", header=TRUE, sep=",")
 CvaB_and_hits <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Supplemental_File_1/Touchon_cinful_output.csv", header=TRUE, sep=",")
 hits_only <- read.csv(file = "../../Touchon_datasets/unfiltered_data/Cinful_Touchon_Hmmer_Hits.csv", header=TRUE, sep=",")
+accenssions <- read.csv(file = "../../Touchon_datasets/unfiltered_data/1224_Genomes_Cinful.csv", header=TRUE, sep=",")
 ```
 
 cleaning raw datasets:
 ```{r}
 accenssion_phylo <- all_data %>%
-  select(Unique.Name, Strain_Name, Accession.Number, Strain_Category, Phylogroup) %>%
+  select(Unique.Name, Strain_Name, Accession.Number, Strain_Category, Phylogroup, Genome_ID) %>%
   rename(accenssion_number = Accession.Number,
          phylogroup = Phylogroup,
          name = Unique.Name,
@@ -41,6 +41,8 @@ accenssion_phylo <- all_data %>%
   unique()
 
 head(accenssion_phylo)
+
+joined_with_accesssions <- inner_join(accenssion_phylo, accenssions)
 ```
 Calculating microcin hit counts:
 ```{r}
@@ -102,11 +104,19 @@ Joining all data into a single dataset:
 ```{r}
 Touchon_data <- inner_join(accenssion_phylo, microcin_hit_count_2)
 Touchon_data2 <- inner_join(Touchon_data, CvaB_hit_count_2)
-Touchon_data2
+
+accenssions2 <-accenssions %>%
+  select(Genome_ID, Assembly)
+
+Touchon_data3 <- left_join(Touchon_data2, accenssions2) %>%
+  distinct(accenssion_number, .keep_all=TRUE)
+Touchon_data3
+
+#write.csv(Touchon_data3, "../../Touchon_datasets/filtered_data/cinful_results_for_Touchon_dataset.csv", row.names=FALSE)
 ```
 Getting stats on each group:
 ```{r}
-strain_name_stats <- Touchon_data2 %>% 
+strain_name_stats <- Touchon_data3 %>% 
   filter(phylogroup == "B2") %>%
   group_by(strain_category) %>%
   summarise(microcin_hits = sum(microcin_hit_count),
@@ -134,7 +144,7 @@ strain_plot
 ```
 
 ```{r}
-phylogroup_stats <- Touchon_data2 %>% 
+phylogroup_stats <- Touchon_data3 %>% 
   group_by(phylogroup) %>%
   summarise(microcin_hits = sum(microcin_hit_count),
             CvaB_hits = sum(CvaB_hit_count)) %>%
@@ -162,7 +172,7 @@ phylo_plot
 Filtering for genomes where a CvaB was found but no microcins were found. 
 
 ```{r}
-filtered_CvaB <- Touchon_data2 %>%
+filtered_CvaB <- Touchon_data3 %>%
   filter(CvaB_hit_count == 1,
          microcin_hit_count == 0)
 filtered_CvaB
@@ -173,55 +183,81 @@ filtered_CvaB
 Compile large dataset (only working with B2):
 ```{r}
 # 4 total entries
-only_CvaB_found <- Touchon_data2 %>%
+only_CvaB_found <- Touchon_data3 %>%
   filter(CvaB_hit_count > 0,
          microcin_hit_count == 0
          #phylogroup == "B2"
          )
 
-write.csv(only_CvaB_found, "../../Touchon_datasets/filtered_data/Only_CvaB_found.csv", row.names = FALSE)
+#write.csv(only_CvaB_found, "../../Touchon_datasets/filtered_data/Only_CvaB_found.csv", row.names = FALSE)
 
 # none found
-only_microcin_found_water <- Touchon_data2 %>%
+only_microcin_found_water <- Touchon_data3 %>%
   filter(CvaB_hit_count == 0,
          microcin_hit_count > 0,
          phylogroup == "B2",
          strain_category == "Water")
 
 # only one found
-only_microcin_found_extraintestinal <- Touchon_data2 %>%
+only_microcin_found_extraintestinal <- Touchon_data3 %>%
   filter(CvaB_hit_count == 0,
          microcin_hit_count > 0,
          phylogroup == "B2",
          strain_category == "Human_Extra-intestinal")
 
 # 5 total entries
-both_CvaB_and_microcin_found_water <- Touchon_data2 %>%
+both_CvaB_and_microcin_found_water <- Touchon_data3 %>%
   filter(CvaB_hit_count != 0,
          microcin_hit_count != 0,
          phylogroup == "B2",
          strain_category == "Water")
 
 # 33 total entries
-nothing_found_water <- Touchon_data2 %>%
+nothing_found_water <- Touchon_data3 %>%
   filter(CvaB_hit_count == 0,
          microcin_hit_count == 0,
          phylogroup == "B2",
          strain_category == "Water")
 
 # 35 total entries
-both_CvaB_and_microcin_found_extraint <- Touchon_data2 %>%
+both_CvaB_and_microcin_found_extraint <- Touchon_data3 %>%
   filter(CvaB_hit_count != 0,
          microcin_hit_count != 0,
          phylogroup == "B2",
          strain_category == "Human_Extra-intestinal")
 
 # 28 total entries
-nothing_found_extraint <- Touchon_data2 %>%
+nothing_found_extraint <- Touchon_data3 %>%
   filter(CvaB_hit_count == 0,
          microcin_hit_count == 0,
          phylogroup == "B2",
          strain_category == "Human_Extra-intestinal")
+```
+
+```{r}
+
+for_dataset1 <- nothing_found_extraint %>%
+  slice_sample(n = 10) 
+
+for_dataset1_2 <- both_CvaB_and_microcin_found_extraint %>%
+  slice_sample(n = 10) 
+
+dataset_1 <- rbind(for_dataset1, for_dataset1_2)
+
+dataset_1_final <- left_join(dataset_1, accenssions2) %>%
+  distinct(accenssion_number, .keep_all=TRUE)
+dataset_1_final
+```
+
+```{r}
+nothing_found_water_15 <- nothing_found_water %>%
+  slice_sample(n = 15)
+  
+dataset_water <- rbind(both_CvaB_and_microcin_found_water, nothing_found_water_15)
+
+dataset_water_final <- left_join(dataset_water, accenssions2) %>%
+  distinct(accenssion_number, .keep_all=TRUE)
+dataset_water_final
 
 ```
 Idea: 
@@ -229,16 +265,16 @@ Idea:
 Dataset 1:
 All B2
 
-15 Nothing found (water)
-5 both CvaB and microcin found (water) - there were only 5 of these
+15 Nothing found (water)--------------------------------------------------cinful: 0, embeddings: 0 (2?)
+5 both CvaB and microcin found (water) - there were only 5 of these-------cinful: 8, embeddings: 9 
 
-10 Nothing found (extraintestinal)
-10 both CvaB and microcin found (extraintestinal) (use top 10)
+10 Nothing found (extraintestinal)----------------------------------------cinful: 0, embeddings: 0
+10 both CvaB and microcin found (extraintestinal) (use top 10)------------cinful: 10, embeddings: 12 (checking these)
 
 Dataset 2: 
 Not all B2
 
-25 only CvaB found and microcin was not found
+25 only CvaB found and microcin was not found-----------cinful: 0, embeddings: 3 
 
 ```{r}
 # plot for only CvaB found:

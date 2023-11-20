@@ -3,6 +3,7 @@ from Bio.Seq import Seq
 import sys
 import re
 import string
+import os
 
 
 # filter ORFs by size and find smaller frames
@@ -12,9 +13,20 @@ import string
 # The smaller alternative sequences might be under the size limit and we don't want to miss them.
 # This script deals with this issue.
 
+genome = sys.argv[1]
+dataset = sys.argv[2]
 
-input_path = "../../ORF_files/ORFs_ecoli_N/protein_ORFs_ecoli_N.fasta"
-output_path = "../../ORF_files/ORFs_ecoli_N/protein_ORFs_ecoli_N_filtered.fasta"
+input_path = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/protein_ORFs_" + genome + ".fasta"
+input_folder = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/"
+isExist = os.path.exists(input_folder)
+if not isExist:
+   os.makedirs(input_folder)
+
+output_path = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/protein_ORFs_" + genome + "_filtered.fasta"
+output_folder = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/"
+isExist = os.path.exists(output_folder)
+if not isExist:
+   os.makedirs(output_folder)
 
 orf_list = list(SeqIO.parse(input_path, "fasta"))
 
@@ -25,7 +37,7 @@ with open(output_path, 'w') as output_file:
         orf_sequence = str(rec.seq)
         orf_description = str(rec.description)
         split_orf = re.split(r'[_.() ]', orf_description)
-        location = split_orf[5] # use to be 4
+        location = split_orf[4] # use to be 4
         split_location = re.split(r'[\[\-\]]', location)
         start_loc = int(split_location[1])
         end_loc = int(split_location[2])
@@ -61,8 +73,8 @@ with open(output_path, 'w') as output_file:
                         break # onece we add an ORF, we do not need to keep looking for subORFs
 
 print("Finished filtering ORFs! :-)")
-print("Next, use the following command to generate esm1-b embeddings:")
-print("python3 extract.py esm1b_t33_650M_UR50S ../../ORF_files/ORFs_HUW04/protein_ORFs_HUW04_filtered.fasta ../../embeddings/genome_embeddings_HUW04/ --include mean per_tok")
+#print("Next, use the following command to generate esm1-b embeddings:")
+#print("python3 extract.py esm1b_t33_650M_UR50S ../../ORF_files/ORFs_HUW04/protein_ORFs_HUW04_filtered.fasta ../../embeddings/genome_embeddings_HUW04/ --include mean per_tok")
           
 #python3 extract.py esm1b_t33_650M_UR50S ../../ORF_files/ORFs_ecoli_L/protein_ORFs_ecoli_L_filtered.fasta ../../embeddings/genome_embeddings_ecoli_L/ --include mean per_tok
            

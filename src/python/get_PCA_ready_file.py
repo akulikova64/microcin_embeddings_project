@@ -6,9 +6,9 @@ import torch
 
 # get PCA-ready CSV file
 
-output_path = "../../for_PCA/kpneumoniae_PCA_data_45_microcins.csv"
-microcin_path = "../../microcin_files/45_microcins_emb_esm1b/"
-orf_path = "../../embeddings/genome_embeddings_kpneumoniae_cluster/"
+output_path = "../../for_PCA/ecoli_L_PCA_data.csv"
+microcin_path = "../../microcin_files/Microcins_Known_emb_esm1b/"
+orf_path = "../../embeddings/ecoli_L/"
 
 microcin_embeddings = os.listdir(microcin_path)
 orf_embeddings = os.listdir(orf_path)
@@ -27,23 +27,26 @@ with open(output_path, "w") as CSV_file:
         embedding = torch.load(microcin_path + microcin)
         avg_embedding = embedding['mean_representations'][33]
         list = avg_embedding.tolist()
-        list = [group, microcin_name] + list
-
-        writer.writerow(list)
+        writer.writerow([group, microcin_name] + list)
 
     for orf in orf_embeddings:
         split_orf = re.split(r'[_.() ]', orf)
-        try:
-            orf_number = split_orf[3]
-            group = "orf"
-            embedding = torch.load(orf_path + orf)
-            avg_embedding = embedding['mean_representations'][33]
-            list = avg_embedding.tolist()
-            list = [group, orf_number] + list
+        #print(split_orf)
+        #sys.exit()
+        #try:
+        orf_number = split_orf[4]
+        #print(orf_number)
+        #sys.exit()
+        group = "orf"
+        embedding = torch.load(orf_path + orf)
+        avg_embedding = embedding['mean_representations'][33]
+        list = avg_embedding.tolist()
+        writer.writerow([group, orf_number] + list)
+        #print(group, orf_number)
+        #sys.exit()
 
-            writer.writerow(list)
-        except:
-            print(orf)
+        #except:
+           # print(split_orf)
 
 
 print("Finished making CSV! :-)")

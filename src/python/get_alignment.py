@@ -20,9 +20,10 @@ def get_alignment(seq1, seq2):
 
     return alignment.formatted(seq1, seq2), score
 
-output_path = "../../alignments/ORF26669_alignments_vibrio_cholerae_HUW04.txt"
+output_path = "../../alignments/klebsiella_ORF.45398.txt"
 
-orf_seq = "MAYSLLNLGADTRKRALAGMQESAQREEQRNQTNQSLKDAQRTKRLSSVTTGAGMGMMAGMQAGSVGGPMGAAMGAAAGLILGELF"
+orf_seq = "MKQLTVFEMEEISGGYSWDFSSITGALTSIVFNSAEAIGASILGATAGALAGSAMGGIFGGNGGGILGIGSIGQAVGMIYGLCVGGVGGAIAGAMVGWDITLDKCIEMFDGFVDGTLAYW"
+
 input_path_microcins =  "../../microcin_files/45_microcins.fasta"
 microcin_list = list(SeqIO.parse(input_path_microcins, "fasta"))
 
@@ -32,7 +33,7 @@ with open(output_path, 'w') as output_file:
         i += 1
         microcin_sequence = str(rec.seq)
         microcin_description = str(rec.description)
-        microcin_name = microcin_description.split("|")[0][0:-3]
+        microcin_name = microcin_description.split("|")[0]
 
         alignment, score = get_alignment(orf_seq, microcin_sequence)
             
