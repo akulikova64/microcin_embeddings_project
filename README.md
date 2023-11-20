@@ -17,6 +17,7 @@ src/ - R and python scripts for data processing
 
 2) python/run_blastp.py - Runs protein blast using the 10 known microcins sequences are queries.
 
+<br />
 
 ### Scripts for analysis:
 
