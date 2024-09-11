@@ -25,6 +25,7 @@ src/ - R and python scripts for data processing
 
 2) R/microcin_homology_plots.Rmd - code for Figure 5 in paper
 
+3) R/microcin_rankings_plot.Rmd - contains heatmap plots of found microcins using different distance metrics
 
 ---
 
