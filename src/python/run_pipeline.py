@@ -8,23 +8,35 @@ import multiprocessing as mp
 def timestamp():
 	return str(datetime.now().time())
 
+#--------------------------main--------------------------------------------------
+
+# list of genomes here:
+dataset = "klebsiella_47"
+genome_path = '../../genome_files/' + dataset + '/'
+genome_list = os.listdir(genome_path)
+
+for genome in genome_list:
+    genome = genome.split(".")[0]
+
 def run_scripts(genomes):
 	for genome in genomes:
-		orf_path = '../../ORF_files/Touchon_genomes_25/ORFs_' + genome + '/protein_ORFs_' + genome + '_filtered.fasta'
-		orf_folder = '../../ORF_files/Touchon_genomes_25/ORFs_' + genome + '/'
+		orf_path = '../../ORF_files/ORFs_10_known_microcins/protein_ORFs_' + genome + '_filtered.fasta'
+		orf_folder = '../../ORF_files/ORFs_10_known_microcins/
 		isExist = os.path.exists(orf_folder)
 		if not isExist:
 			os.makedirs(orf_folder)
 
+'''
 		embedding_path = '../../embeddings/Touchon_genomes_25/genome_embeddings_' + genome + '/'
 		isExist = os.path.exists(embedding_path)
 		if not isExist:
 			os.makedirs(embedding_path)
+'''
 
 		list_scripts = [#'find_ORFs.py ' + genome,
 						#'filter_ORFs.py ' + genome,
-						'annotate_genome.py ' + genome,
-						'extract.py esm1b_t33_650M_UR50S ' + orf_path + ' ' + embedding_path + ' --include mean per_tok',
+						#'annotate_genome.py ' + genome,
+						#'extract.py esm1b_t33_650M_UR50S ' + orf_path + ' ' + embedding_path + ' --include mean per_tok',
 						'get_semantic_distance ' + genome,
 						'get_distance_with_averaged_emb' + genome]
 		
@@ -35,8 +47,8 @@ def run_scripts(genomes):
 			os.system('python ' + script)
 
 
-#--------------------------main--------------------------------------------------
 
+'''
 DIV = 5 # number of groups into which the data is diveded that run in parallel (parallel processes)
 
 # list of genomes here:
@@ -62,6 +74,7 @@ if __name__ == '__main__':
 	for i in range(0, DIV):
 		p = mp.Process(target = run_scripts, args = (genome_array[i],))
 		p.start()
+'''
 	
 
 

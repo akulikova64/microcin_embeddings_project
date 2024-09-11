@@ -17,7 +17,7 @@ def get_alignment_score(orf_seq, microcin_seq):
 
     return alignment
 
-genome = sys.argv[1]
+genome = "ecoli_pcolv-k30_V"
 #dataset = sys.argv[2]
 
 input_path_microcins =  "../../microcin_files/Microcins_Known.fasta"
@@ -25,8 +25,8 @@ input_path_microcins =  "../../microcin_files/Microcins_Known.fasta"
 #input_path_orfs = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/protein_ORFs_" + genome + "_filtered.fasta"
 #input_folder_orfs = "../../ORF_files/" + dataset + "/ORFs_" + genome + "/"
 
-input_path_orfs = "../../ORF_files/ORFs_" + genome + "/protein_ORFs_" + genome + "_filtered.fasta"
-input_folder_orfs = "../../ORF_files/ORFs_" + genome + "/"
+input_path_orfs = "../../ORF_files/ORFs_10_known_microcins/protein_ORFs_ecoli_pcolv-k30_V_filtered.fasta"
+input_folder_orfs = "../../ORF_files/ORFs_10_known_microcins/"
 
 isExist = os.path.exists(input_folder_orfs)
 if not isExist:
@@ -35,7 +35,7 @@ if not isExist:
 #output_path = "../../genome_annotation_csvs/" + dataset + "/" + genome + "_annotation.csv" # output path contains the orf ID and whether or not it's a microcin. 
 #output_folder = "../../genome_annotation_csvs/" + dataset + "/"
 
-output_path = "../../genome_annotation_csvs/" + genome + "_annotation.csv" # output path contains the orf ID and whether or not it's a microcin. 
+output_path = "../../genome_annotation_csvs/10_microcin_files/" + genome + "_annotation.csv" # output path contains the orf ID and whether or not it's a microcin. 
 output_folder = "../../genome_annotation_csvs/"
 
 
