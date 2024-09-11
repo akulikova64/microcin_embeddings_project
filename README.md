@@ -27,6 +27,7 @@ src/ - R and python scripts for data processing
 
 3) R/microcin_rankings_plot.Rmd - contains heatmap plots of found microcins using different distance metrics
 
+4) R/PCA_interactive.Rmd - contains PCA analysis and plot and silhouette score plots
 ---
 
 CC BY-NC 4.0 This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License (see https://creativecommons.org/licenses/by-nc/4.0/legalcode).
